@@ -82,7 +82,6 @@ function scws_db_scan_ajax() {
                          //Prepare the select row
                          $sql = 'SELECT * FROM '. $table . ' WHERE ';
                          $sql .= str_replace('%%%', $row->Field, $words);
-                         echo $sql; die();
                          $search = $wpdb->get_results($sql);
                          if (!empty($search))
                               $results += count($search);
