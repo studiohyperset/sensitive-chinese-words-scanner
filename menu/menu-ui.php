@@ -6,7 +6,7 @@
 function scws_menu() {
     add_menu_page(
         __( 'Sensitive Chinese Words Scanner', 'sensitive-chinese' ),
-        'Sensitive Chinese',
+        __('Sensitive Chinese', 'sensitive-chinese' ),
         'manage_options',
         'scws_options',
         'scws_menu_function',
@@ -28,7 +28,7 @@ function scws_menu() {
     add_submenu_page( 
         'scws_options', 
         __( 'Sensitive Chinese File Scanner', 'sensitive-chinese' ),
-        'File Scan',
+        __('File Scan', 'sensitive-chinese' ),
         'manage_options',
         'scws_file_scan', 
         'scws_menu_file_scan' 
@@ -38,7 +38,7 @@ function scws_menu() {
     add_submenu_page( 
         'scws_options', 
         __( 'Sensitive Chinese Active Scanner', 'sensitive-chinese' ),
-        'Active Scan',
+        __('Active Scan', 'sensitive-chinese' ),
         'manage_options',
         'scws_active_scan', 
         'scws_menu_active_scan' 
