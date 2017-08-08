@@ -52,6 +52,9 @@ function scws_get_words( $sql = false ) {
  * and returns the amount of words found
  */
 function scws_search_words_in_text( $words = null, $text ) {
+	set_time_limit(30);
+	
+	$return = array();
 
 	//Get the default words
 	if (empty($words) || !is_array($words))
@@ -61,16 +64,38 @@ function scws_search_words_in_text( $words = null, $text ) {
 	if (is_array($text)) {
 
 		//Check each value
-		$return = array();
 		foreach( $text as $t ) {
 
-			//Call it recursiverly
-			$return[] = scws_search_words_in_text( $words, $t );
+			if ($t == '')
+				continue;
+
+			//Cycle through each word
+			foreach ($words as $w) {
+				if ($w == '')
+					continue;
+
+				$found = preg_match_all( '/\b'. $w .'\b/i', $t, $founder );
+				if ($found > 0) {
+					$return[] = array($w, $found);
+				}
+			}
+
 		}
 
-		return $return;
+	} else {
+
+		//Cycle through each word
+		foreach ($words as $w) {
+			if ($w == '')
+				continue;
+
+			$found = preg_match_all( '/\b'. $w .'\b/i', $text, $founder );
+			if ($found > 0) {
+				$return[] = array($w, $found);
+			}
+		}
+
 	}
 
-	//Cycle through each word
-	//foreach ($words as $w)
+	return $return;
 }

@@ -24,7 +24,7 @@ function scws_menu_db_scan() {
           <input type="hidden" name="step" value="1" />
           <input type="hidden" name="additional" value="" />
           <input type="hidden" name="scws_db_scan_nonce" value="<?php echo wp_create_nonce( 'scws_db_scan_nonce_1' ); ?>" />
-
+          
           <button><?php _e('Run DB Scan', 'sensitive-chinese'); ?></button>
      </form>
 
@@ -60,7 +60,7 @@ function scws_menu_db_scan() {
                          $('#scws_run_db_scan input[name=scws_db_scan_nonce]').val( results[3] );
 
                          $('#result').append( results[4] );
-                         
+
                          $('#scws_run_db_scan').submit();
 
                     }
@@ -72,5 +72,5 @@ function scws_menu_db_scan() {
      });
      </script>
      <?php
-     scws_get_words();
+     
 }
