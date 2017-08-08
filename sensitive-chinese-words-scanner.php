@@ -22,7 +22,7 @@ require('ajax/db-scan.php');
  */
 function scws_get_words( $sql = false ) {
 
-	$words = mb_convert_encoding( file_get_contents( plugin_dir_path( __FILE__ ) . 'assets/data/chinese.csv', FILE_TEXT ) , 'UTF-8', 'GB2312');
+	$words = mb_convert_encoding( file_get_contents( plugin_dir_path( __FILE__ ) . 'assets/data/chinese.csv', FILE_TEXT ) , 'UTF-8', 'GB18030');
 	
 	$words = explode(PHP_EOL, $words);
 	
@@ -36,11 +36,41 @@ function scws_get_words( $sql = false ) {
 			else
 				$i++;
 
-			$sql .= '%%% LIKE "%'. $word .'%"';
+			$sql .= '%%% REGEXP "[[:<:]]'. $word .'[[:>:]]"';
 		}
-
+		
 		return $sql;
 	} else
 		return $words;
 
+}
+
+
+
+/*
+ * Search for $words in $text
+ * and returns the amount of words found
+ */
+function scws_search_words_in_text( $words = null, $text ) {
+
+	//Get the default words
+	if (empty($words) || !is_array($words))
+		$words = scws_get_words();
+
+	//Check if array
+	if (is_array($text)) {
+
+		//Check each value
+		$return = array();
+		foreach( $text as $t ) {
+
+			//Call it recursiverly
+			$return[] = scws_search_words_in_text( $words, $t );
+		}
+
+		return $return;
+	}
+
+	//Cycle through each word
+	//foreach ($words as $w)
 }

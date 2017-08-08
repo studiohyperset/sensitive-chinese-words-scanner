@@ -62,8 +62,8 @@ function scws_db_scan_ajax() {
                $table = $tables[$step-2];
 
                //Get all columns name from table
-               $rows = $wpdb->get_results('DESCRIBE '. $table);
-               if (count($rows) == 0)
+               $columns = $wpdb->get_results('DESCRIBE '. $table);
+               if (count($columns) == 0)
                     scws_ajax_die( 0, __('Error! We could not read data from your DB.', 'sensitive-chinese') );
 
                //Get all expected words
@@ -73,18 +73,27 @@ function scws_db_scan_ajax() {
                $textColumns = 0;
                $results = 0;
 
-               foreach ($rows as $row) {
+               foreach ($columns as $column) {
                     
                     //skip not text columns
-                    if ( strpos($row->Type, 'text') !== false || strpos($row->Type, 'char') !== false || strpos($row->Type, 'blob') !== false || strpos($row->Type, 'binary') !== false ) {
+                    if ( strpos($column->Type, 'text') !== false || strpos($column->Type, 'char') !== false || strpos($column->Type, 'blob') !== false || strpos($column->Type, 'binary') !== false ) {
                          $textColumns++;
 
                          //Prepare the select row
                          $sql = 'SELECT * FROM '. $table . ' WHERE ';
-                         $sql .= str_replace('%%%', $row->Field, $words);
-                         $search = $wpdb->get_results($sql);
-                         if (!empty($search))
+                         $sql .= str_replace('%%%', $column->Field, $words);
+                         $search = $wpdb->get_results($sql, ARRAY_A);
+                         //If found sum up
+                         if (!empty($search)) {
                               $results += count($search);
+                              /*$columnResult = '';
+                              foreach ($search as $s) {
+                                   $found = scws_search_words_in_text( $words, $s );
+                                   $column
+                              }
+                              echo '0|||';
+                              var_dump($search); die();*/
+                         }
                     }
 
                }
