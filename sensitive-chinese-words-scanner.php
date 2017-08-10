@@ -38,7 +38,7 @@ function scws_get_words( $sql = false ) {
 			else
 				$i++;
 
-			$sql .= '%%% REGEXP "[[:<:]]'. $word .'[[:>:]]"';
+			$sql .= '%%% REGEXP "'. scws_get_regex( $word ) .'"';
 		}
 		
 		return $sql;
@@ -47,6 +47,16 @@ function scws_get_words( $sql = false ) {
 
 }
 
+
+
+/*
+ * Standarize the regex search
+ */
+function scws_get_regex( $word ) {
+
+	return '[[:<:]]'. $word .'[[:>:]]';
+
+}
 
 
 /*

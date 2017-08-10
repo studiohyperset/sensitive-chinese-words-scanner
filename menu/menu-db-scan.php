@@ -105,6 +105,63 @@ function scws_menu_db_scan() {
 
           });
 
+          $(document).on('click', '#result li', function(e){
+               e.preventDefault();
+               e.stopPropagation();
+               $(this).toggleClass('open');
+          });
+
+          $(document).on('click', '#result li .edit', function(e){
+               e.stopPropagation();
+          });
+
+          $(document).on('click', '#result li .edit button', function(e){
+               e.stopPropagation();
+               e.preventDefault();
+
+               var form = $(this).parent(),
+                    replace = form.children('input').val(),
+                    keyword = form.attr('data-key'),
+                    table = form.attr('data-table');
+
+               form.fadeTo(500,0.3);
+               
+               if (table == '') {
+                    alert('Please insert a word for replace.');
+                    return;
+               }
+
+               if (table == '' || keyword == '') {
+                    alert('There was a problem. Reload the page and try again.');
+                    return;
+               }
+               
+               //Send the form data
+               var data = 'action=scws_db_replace_ajax&keyword=' + keyword + '&table='+ table +'&replace='+ replace;
+               if (confirm('Are you sure you want replace "'+ keyword +'" with "'+ replace +'" on table "'+ table +'"? This action cannot be reverted. Always do a backup from your DB before doing this.')) {
+                    $.post( ajaxurl, data, function( result ) {
+
+                         switch (result) {
+                              case '0' : 
+                              case '1' :
+                              case '2' :
+                              case '3' :
+                              case '4' :
+                                   alert('There was a problem. Reload the page and try again.');
+                                   break;
+                              default:
+                                   form.html(result);
+                                   break;
+                         }
+
+                         form.fadeTo(500,1);
+
+                    });
+               } else {
+                    form.fadeTo(500,1);
+               }
+          });
+
      });
      </script>
      <?php

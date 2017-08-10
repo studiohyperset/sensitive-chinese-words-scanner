@@ -1,3 +1,25 @@
+.sensitive-chinese_page_scws_db_scan select,
+.sensitive-chinese_page_scws_db_scan input {
+  background: #fff;
+  border: 1px solid #fff;
+  box-shadow: none;
+  line-height: 30px;
+  margin: 0 10px 0 0;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 5px;
+  height: 30px;
+}
+.sensitive-chinese_page_scws_db_scan button {
+  padding: 0 20px;
+  line-height: 30px;
+  border: 0;
+  background: #333;
+  color: #fff;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
 .sensitive-chinese_page_scws_db_scan #result {
   margin: 20px 20px 20px 0;
 }
@@ -7,12 +29,22 @@
   border-bottom: 1px solid #eee;
 }
 .sensitive-chinese_page_scws_db_scan #result > div li {
-  background: #fafafa;
+  background: #eee;
   padding: 5px 10px;
   display: inline-block;
   vertical-align: middle;
   margin: 2px;
   cursor: pointer;
+}
+.sensitive-chinese_page_scws_db_scan #result > div li .edit {
+  overflow: hidden;
+  width: 0;
+  max-height: 0;
+  transition: all 0.5s;
+}
+.sensitive-chinese_page_scws_db_scan #result > div li.open .edit {
+  width: 100%;
+  max-height: 50px;
 }
 .sensitive-chinese_page_scws_db_scan #result.loading:after {
   content: 'Loading...';
