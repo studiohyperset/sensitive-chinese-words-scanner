@@ -67,3 +67,14 @@ function scws_menu_function() {
 
     <?php
 }
+
+
+
+/*
+ * Register the CSS
+ */
+function scws_admin_style() {
+        wp_register_style( 'scws_admin_style', SCWS_URL . '/assets/css/styles.css', false, '1.0.0' );
+        wp_enqueue_style( 'scws_admin_style' );
+}
+add_action( 'admin_enqueue_scripts', 'scws_admin_style' );

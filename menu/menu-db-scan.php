@@ -21,10 +21,23 @@ function scws_menu_db_scan() {
 
      <form id="scws_run_db_scan">
           <input type="hidden" name="action" value="scws_db_scan" />
-          <input type="hidden" name="step" value="1" />
+          <input type="hidden" name="step" value="2" />
+          <input type="hidden" name="scws_db_scan_nonce" value="<?php echo wp_create_nonce( 'scws_db_scan_nonce_2' ); ?>" />
           <input type="hidden" name="additional" value="" />
-          <input type="hidden" name="scws_db_scan_nonce" value="<?php echo wp_create_nonce( 'scws_db_scan_nonce_1' ); ?>" />
           
+          <?php
+          global $wpdb;
+          $rows = $wpdb->get_results('SHOW TABLES LIKE "'. $wpdb->prefix .'%"', OBJECT_K );
+
+          if (count($rows) > 0) {
+               echo '<select>';
+               echo '<option value="0">All tables</option>';
+               foreach ($rows as $key => $value) {
+                    echo '<option value="'. $key .'">'. $key .'</option>';
+               }
+               echo '</select>';
+          }
+          ?>
           <button><?php _e('Run DB Scan', 'sensitive-chinese'); ?></button>
      </form>
 
@@ -37,32 +50,55 @@ function scws_menu_db_scan() {
                
                e.preventDefault();
 
+               $('#result').addClass('loading');
+
+               var select = $(this).children('select'),
+                    addit = $(this).children('input[name=additional]'),
+                    total = select.children('option').length - 1;
+
+               select.attr('disabled', 'disabled');
+               
+               if (select.val() == '0')
+                    addit.val( select.children('option:nth-of-type('+ $('#scws_run_db_scan input[name=step]').val() +')').val() );
+               else
+                    addit.val( select.val() );
+
+               if ($('#scws_run_db_scan input[name=step]').val() > total) {
+                    $('#result').append('<br />Finished!');
+                    $('#result').removeClass('loading');
+                    select.attr('disabled', false);
+               }
+               
+
                //Send the form data
                var data = $(this).serialize();
                $.post( ajaxurl, data, function( result ) {
 
                     results = result.split( '|||' );
 
-                    //Check the result of Ajax. If 0 it ended
+                    //Check if error.
                     if ( results[0] == '0' ) {
 
                          $('#result').append( results[1] );
                          $('#result').append('<br />Finished!');
+                         $('#result').removeClass('loading');
+                         select.attr('disabled', false);
                     
                     //Otherwise it should output content and call it again
                     } else {
 
                          $('#scws_run_db_scan input[name=step]').val( results[1] );
 
-                         if (results[2] != '0')
-                              $('#scws_run_db_scan input[name=additional]').val( results[2] );
-
                          $('#scws_run_db_scan input[name=scws_db_scan_nonce]').val( results[3] );
 
                          $('#result').append( results[4] );
 
-                         $('#scws_run_db_scan').submit();
-
+                         if (select.val() == '0')
+                              $('#scws_run_db_scan').submit();
+                         else {
+                              $('#result').removeClass('loading');
+                              select.attr('disabled', false);
+                         }
                     }
 
                });

@@ -1,0 +1,27 @@
+.sensitive-chinese_page_scws_db_scan {
+     #result {
+          margin: 20px 20px 20px 0;
+
+          > div {
+               padding: 10px;
+               background: #fff;
+               border-bottom: 1px solid #eee;
+
+               li {
+                    background: #fafafa;
+                    padding: 5px 10px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin: 2px;
+                    cursor: pointer;
+               }
+          }
+
+          &.loading {
+               &:after {
+                    content: 'Loading...';
+                    display: block;
+               }
+          }
+     }
+}
