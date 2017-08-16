@@ -29,6 +29,7 @@ function scws_db_scan_ajax() {
      //Already Know Cases. Saving SQL Resources
      $table = $_POST['additional'];
      $columns = scws_db_know_tables($table);
+     $key = scws_db_know_tables($table, true);
 
      if (count($columns) == 0)
           scws_ajax_die( 0, __('Error! We could not read data from your DB.', 'sensitive-chinese'), 'div' );
@@ -38,10 +39,11 @@ function scws_db_scan_ajax() {
 
      //This counter whill check if have any text column
      $textColumns = 0;
-     $results = 0;
      $columnResult = '';
-     $foundTotal = array();
+     $result = array();
+     $foundTotal = 0;
 
+     //Search in each column
      foreach ($columns as $column) {
           set_time_limit(60);
           
@@ -50,25 +52,73 @@ function scws_db_scan_ajax() {
                $textColumns++;
 
                //Prepare the select row
-               $sql = 'SELECT '. $column->Field .' FROM '. $table . ' WHERE ';
+               if ($key !== 0)
+                    $sql = 'SELECT '. $key .', '. $column->Field .' FROM '. $table . ' WHERE ';
+               else
+                    $sql = 'SELECT '. $column->Field .' FROM '. $table . ' WHERE ';
+               
                $sql .= str_replace('%%%', $column->Field, $words);
-               $search = $wpdb->get_results($sql, ARRAY_A);
-
-               //If found check singularity
+               $search = $wpdb->get_results($sql, ARRAY_N);
+               
+               //Found the word with DB Regex. Let's confirm with PHP Regex
                if (!empty($search)) {
 
-                    //Detect which words present
-                    foreach ($search as $s) {
-                         $found = scws_search_words_in_text( null, $s );
+                    //Cycle through each result from DB
+                    foreach ($search as $row) {
+                         
+                         if ($key !== 0) {
+                              $rowKey = $row[0];
+                              $rowText = $row[1];
+                         } else {
+                              $rowKey = 0;
+                              $rowText = $row[0];
+                         }
 
-                         //Create a list
+                         //Search in the result row for PHP Regex
+                         $found = scws_search_words_in_text( null, $rowText );
+
+                         //PHP Regex confirmed. Let's add to our list
                          if (count($found) > 0) {
-                              //Increase the counter
-                              $results += count($found);
-                              //Save for Later
+
+                              //Cycle through each found word in the row
                               foreach ($found as $f) {
-                                   $foundTotal[$f[0]] += $f[1];
+
+                                   $wordFound = $f[0];
+                                   $wordFoundAmount = $f[1];
+                                   $foundTotal += $wordFoundAmount;
+                                   $string = '';
+                                   $rowText = htmlspecialchars($rowText);
+
+                                   //If row too big, lets cut it
+                                   if (strlen($rowText) > 100) {
+
+                                        //Get the regex for the word
+                                        $regex = scws_get_regex($wordFound, false);
+
+                                        //Get the point where it is
+                                        preg_match_all( $regex, $rowText, $matches, PREG_OFFSET_CAPTURE);
+                                        
+                                        //Replace the word for the bold version
+                                        $rowText = preg_replace( $regex, '<strong>'. $wordFound .'</strong>', $rowText );
+                                        
+                                        foreach($matches[0] as $match) {
+                                             $offset = $match[1];
+
+                                             //Cut the string
+                                             $string .= '[...] '. substr($rowText, $offset-50, 100) . ' [...] ';
+                                        }
+                                        
+                                   } else {
+                                        $string .= '<strong>'. $rowText . '</strong>';
+                                   }
+
+                                   /*
+                                   * $return = array( TABLE_NAME, COLUMN_NAME, WORD_FOUND, AMOUNT_FOUND, STRING, KEY )
+                                   */
+                                   $result[] = array( $table, $column->Field, $wordFound, $wordFoundAmount, $string, $rowKey );
+                                   
                               }
+                              
                          }
                     }
                }
@@ -76,11 +126,26 @@ function scws_db_scan_ajax() {
 
      }
 
-     if (count($foundTotal) > 0) {
-          foreach ($foundTotal as $key => $value) {
-               $columnResult .= '<li>'. $key .' <strong>('. $value .')</strong> <div class="edit" data-key="'. $key .'" data-table="'. $table .'">Change "'. $key .'" to <input type="text"></input><button>Change</button></div></li>';
+     if (count($result) > 0) {
+          foreach($result as $res) {
+               if ($key !== 0) {
+                    $columnResult .= '<li>'. $res[2] .' <strong>('. $res[3] .')</strong> 
+                         <div class="edit" data-table="'. $res[0] .'" data-column="'. $res[1] .'" data-word="'. $res[2] .'" data-key="'. $res[5] .'">
+                              <div class="text-block"><i>ID: '. $res[5] .'</i><i>'. $res[1] .'</i>'. $res[4] .'</div>
+                              <div class="text-change">Change "'. $res[2] .'" to <input type="text"></input><button>'. __('Change', 'sensitive-chinese') .'</button></div>
+                         </div>
+                    </li>';
+               } else {
+                    $columnResult .= '<li>'. $res[2] .' <strong>('. $res[3] .')</strong> 
+                         <div class="edit" data-table="'. $res[0] .'" data-column="'. $res[1] .'" data-word="'. $res[2] .'" data-key="'. $res[5] .'">
+                              <div class="text-block"><i>'. $res[1] .'</i>'. $res[4] .'</div>
+                              <div class="text-change"><i>'. __('This Table has no Primary Key. You will need to edit it manually', 'sensitive-chinese') . '</i></div>
+                         </div>
+                    </li>';
+               }
           }
      }
+
 
      $step++;
      $return[] = $step;
@@ -89,10 +154,10 @@ function scws_db_scan_ajax() {
      if ($textColumns == 0)
           $return[] = scws_wrap_element( __('No text columns on table', 'sensitive-chinese') . ' '. $table, 'div');
      else {
-          if (count($foundTotal) == 0)
+          if ($foundTotal == 0)
                $return[] = scws_wrap_element( __('No sensitive word found on table', 'sensitive-chinese') . ' '. $table, 'div');
           else
-               $return[] = scws_wrap_element( count($foundTotal) . ' ' . __('sensitive words found on table', 'sensitive-chinese') . ' '. $table . ':<br />' . $columnResult, 'div' );
+               $return[] = scws_wrap_element( $foundTotal . ' ' . __('sensitive words found on table', 'sensitive-chinese') . ' '. $table . ':<br />' . $columnResult, 'div' );
      }
 
      scws_ajax_die($step, $return, 'div');
@@ -165,7 +230,7 @@ function scws_db_replace_ajax() {
 /*
  * Retrieve the columns for search on a table
  */
-function scws_db_know_tables($table) {
+function scws_db_know_tables($table, $pk = false) {
 
      global $wpdb;
      
@@ -177,6 +242,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'meta_value'
                     )
                );
+               $key = 'meta_id';
           break;
           case $wpdb->prefix . 'comments':
                $columns = array(
@@ -193,6 +259,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'comment_author_url'
                     )
                );
+               $key = 'comment_ID';
           break;
           case $wpdb->prefix . 'links':
                $columns = array(
@@ -209,6 +276,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'link_description'
                     )
                );
+               $key = 'link_id';
           break;
           case $wpdb->prefix . 'options':
                $columns = array(
@@ -217,6 +285,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'option_value'
                     )
                );
+               $key = 'option_id';
           break;
           case $wpdb->prefix . 'postmeta':
           case $wpdb->prefix . 'termmeta':
@@ -227,6 +296,9 @@ function scws_db_know_tables($table) {
                          'Field' => 'meta_value'
                     )
                );
+               $key = 'meta_id';
+               if ($table == $wpdb->prefix . 'usermeta')
+                    $key = 'umeta_id';
           break;
           case $wpdb->prefix . 'posts':
                $columns = array(
@@ -247,6 +319,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'post_name'
                     )
                );
+               $key = 'ID';
           break;
           case $wpdb->prefix . 'terms':
                $columns = array(
@@ -259,6 +332,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'slug'
                     )
                );
+               $key = 'term_id';
           break;
           case $wpdb->prefix . 'term_relationships':
                $columns = array(
@@ -267,6 +341,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'object_id'
                     )
                );
+               $key = 'object_id';
           break;
           case $wpdb->prefix . 'term_taxonomy':
                $columns = array(
@@ -279,6 +354,7 @@ function scws_db_know_tables($table) {
                          'Field' => 'description'
                     )
                );
+               $key = 'term_taxonomy_id';
           break;
           case $wpdb->prefix . 'users':
                $columns = array(
@@ -295,13 +371,26 @@ function scws_db_know_tables($table) {
                          'Field' => 'display_name'
                     )
                );
+               $key = 'ID';
           break;
           default:
-               //Get all columns name from table
-               $columns = $wpdb->get_results('DESCRIBE '. $table);
+               if ($pk === false) {
+                    //Get all columns name from table
+                    $columns = $wpdb->get_results('DESCRIBE '. $table);
+               } else {
+                    //Get Key from DB
+                    $columns = $wpdb->get_results('SHOW INDEX FROM '. $table . ' WHERE Key_name = "PRIMARY"');
+                    if (isset($columns[0]->Column_name))
+                         $key = $columns[0]->Column_name;
+                    else
+                         $key = 0;
+               }
           break;
      }
 
+     if ($pk !== false)
+          return $key;
+     
      return $columns;
 
 }

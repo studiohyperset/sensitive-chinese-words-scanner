@@ -11,7 +11,7 @@ function scws_menu_db_scan() {
 
      <?php if (empty($report)) : ?>
 
-          <p><?php _e('Go ahead and scan your site DB for the first time.', 'sensitive-chinese'); ?></p>
+          <p><?php _e('Go ahead and scan your site DB.', 'sensitive-chinese'); ?></p>
 
      <?php else : ?>
 

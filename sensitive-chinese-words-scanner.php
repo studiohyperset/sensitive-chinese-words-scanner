@@ -5,7 +5,7 @@
 Plugin Name:  Sensitive Chinese Words Scanner
 Plugin URI:   #
 Description:  Scan your website for banned sensitive words
-Version:      0.0.2
+Version:      0.0.3
 Author:       Studio Hyperset
 Author URI:   https://www.studiohyperset.com
 Text Domain:  sensitive-chinese
@@ -52,9 +52,12 @@ function scws_get_words( $sql = false ) {
 /*
  * Standarize the regex search
  */
-function scws_get_regex( $word ) {
+function scws_get_regex( $word, $sql = true ) {
 
-	return '[[:<:]]'. $word .'[[:>:]]';
+	if ($sql)
+		return '[[:<:]]'. $word .'[[:>:]]';
+	else
+		return '/\b'. $word .'\b/iu';
 
 }
 
@@ -86,7 +89,7 @@ function scws_search_words_in_text( $words = null, $text ) {
 				if ($w == '')
 					continue;
 
-				$found = preg_match_all( '/\b'. $w .'\b/i', $t, $founder );
+				$found = preg_match_all( scws_get_regex($w, false), $t, $founder );
 				if ($found > 0) {
 					$return[] = array($w, $found);
 				}
@@ -101,7 +104,8 @@ function scws_search_words_in_text( $words = null, $text ) {
 			if ($w == '')
 				continue;
 
-			$found = preg_match_all( '/\b'. $w .'\b/i', $text, $founder );
+			//Search for every word in the text
+			$found = preg_match_all( scws_get_regex($w, false), $text, $founder );
 			if ($found > 0) {
 				$return[] = array($w, $found);
 			}
