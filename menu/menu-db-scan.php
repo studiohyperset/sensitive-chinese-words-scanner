@@ -119,26 +119,29 @@ function scws_menu_db_scan() {
                e.stopPropagation();
                e.preventDefault();
 
-               var form = $(this).parent(),
-                    replace = form.children('input').val(),
-                    keyword = form.attr('data-key'),
+               var form = $(this).parent().parent(),
+                    replace = form.find('input').val(),
+                    word = form.attr('data-word'),
+                    key = form.attr('data-key'),
+                    keyname = form.attr('data-keyname'),
+                    column = form.attr('data-column'),
                     table = form.attr('data-table');
-
-               form.fadeTo(500,0.3);
                
-               if (table == '') {
+               if (replace == '') {
                     alert('Please insert a word for replace.');
                     return;
                }
 
-               if (table == '' || keyword == '') {
+               if (table == '' || column == '' || key == '' || word == '') {
                     alert('There was a problem. Reload the page and try again.');
                     return;
                }
+
+               form.fadeTo(500,0.3);
                
                //Send the form data
-               var data = 'action=scws_db_replace_ajax&keyword=' + keyword + '&table='+ table +'&replace='+ replace;
-               if (confirm('Are you sure you want replace "'+ keyword +'" with "'+ replace +'" on table "'+ table +'"? This action cannot be reverted. Always do a backup from your DB before doing this.')) {
+               var data = 'action=scws_db_replace_ajax&replace=' + replace + '&word='+ word +'&key='+ key +'&column='+ column + '&table='+ table + '&keyname='+ keyname;
+               if (confirm('Are you sure you want replace "'+ word +'" with "'+ replace +'" on table "'+ table +'"? This action cannot be reverted. Always do a backup from your DB before doing this.')) {
                     $.post( ajaxurl, data, function( result ) {
 
                          switch (result) {

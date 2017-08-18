@@ -113,8 +113,8 @@ function scws_db_scan_ajax() {
                                    }
 
                                    /*
-                                   * $return = array( TABLE_NAME, COLUMN_NAME, WORD_FOUND, AMOUNT_FOUND, STRING, KEY )
-                                   */
+                                    * $return = array( TABLE_NAME, COLUMN_NAME, WORD_FOUND, AMOUNT_FOUND, STRING, KEY )
+                                    */
                                    $result[] = array( $table, $column->Field, $wordFound, $wordFoundAmount, $string, $rowKey );
                                    
                               }
@@ -130,7 +130,7 @@ function scws_db_scan_ajax() {
           foreach($result as $res) {
                if ($key !== 0) {
                     $columnResult .= '<li>'. $res[2] .' <strong>('. $res[3] .')</strong> 
-                         <div class="edit" data-table="'. $res[0] .'" data-column="'. $res[1] .'" data-word="'. $res[2] .'" data-key="'. $res[5] .'">
+                         <div class="edit" data-table="'. $res[0] .'" data-column="'. $res[1] .'" data-word="'. $res[2] .'" data-key="'. $res[5] .'" data-keyname="'. $key .'">
                               <div class="text-block"><i>ID: '. $res[5] .'</i><i>'. $res[1] .'</i>'. $res[4] .'</div>
                               <div class="text-change">Change "'. $res[2] .'" to <input type="text"></input><button>'. __('Change', 'sensitive-chinese') .'</button></div>
                          </div>
@@ -175,55 +175,43 @@ function scws_db_replace_ajax() {
 
      global $wpdb;
 
-     die('0');
-
-     if ( ! ( isset($_POST['keyword']) && isset($_POST['table']) && isset($_POST['replace']) ) )
+     if ( ! ( isset($_POST['replace']) && isset($_POST['word']) && isset($_POST['key']) && isset($_POST['column']) && isset($_POST['table']) && isset($_POST['keyname']) ) )
           die('0');
 
-     if ( ( empty($_POST['keyword']) || empty($_POST['table']) || empty($_POST['replace']) ) )
+     if ( ( empty($_POST['replace']) || empty($_POST['word']) || empty($_POST['key']) || empty($_POST['column']) || empty($_POST['table']) || empty($_POST['keyname']) ) )
           die('1');
      
      //Already Know Cases. Saving SQL Resources
      $columns = scws_db_know_tables($_POST['table']);
-
      if (count($columns) == 0)
           die('2');
 
      //Check if keyword in on our list
      $words = scws_get_words( false );
-     if (!in_array($_POST['keyword'], $words))
+     if (!in_array($_POST['word'], $words))
           die('3');
 
-     //This counter whill check if have any text column
-     $changes = 0;
-     foreach ($columns as $column) {
-          set_time_limit(60);
-          
-          //skip not text columns
-          if ( strpos($column->Type, 'text') !== false || strpos($column->Type, 'char') !== false || strpos($column->Type, 'blob') !== false || strpos($column->Type, 'binary') !== false ) {
-
-               //Prepare the update row
-               $sql = 'UPDATE %s SET %s = trim(REPLACE(concat(" ",%s," "), %s, %s))';
-
-               $search = $wpdb->get_results( $wpdb->prepare($sql, $_POST['table'], $column->Field, $column->Field, " " . $_POST['keyword'] . " ", " ". $_POST['replace'] . " ") );
-               var_dump( $wpdb->prepare($sql, $_POST['table'], $column->Field, $column->Field, " " . $_POST['keyword'] . " ", " ". $_POST['replace'] . " "));
-               var_dump($search);
-               //Check if any replace was done
-               if (!empty($search)) {
-
-                    $changes += $wpdb->num_rows;
-
-               }
-          }
-
-     }
-
-     if ($changes == 0)
+     //Everything OK. Get the current column value
+     $sql = "SELECT ". $_POST['column'] ." FROM ". $_POST['table'] ." WHERE ". $_POST['column'] ." REGEXP %s AND ". $_POST['keyname']. " = %d";
+     $search = $wpdb->get_results( $wpdb->prepare($sql, scws_get_regex( $_POST['word']), $_POST['key'] ) );
+     
+     if (empty($search))
           die('4');
 
-     die($changes .' replaces done on table '. $_POST['table'] );
+     //Replace with PHP
+     $content = $search[0]->$_POST['column'];
+     $replaced = preg_replace( scws_get_regex($_POST['word'], false), $_POST['replace'], $content, -1, $total );
+     if ($total == 0)
+          die('5');
 
-     
+     //Update in SQL
+     $sql = "UPDATE ". $_POST['table'] ." SET ". $_POST['column'] ." = %s WHERE ". $_POST['keyname']. " = %d";
+     $search = $wpdb->update( $_POST['table'], array( $_POST['column'] => $replaced ), array( $_POST['keyname'] => $_POST['key'] ), '%s', '%d' );
+     if ($search === false)
+          die('6');
+
+     die( '<strong>'. $_POST['word'] .'</strong> replaced with <strong>'. $_POST['replace'] .'</strong>');
+
 }
 
 
