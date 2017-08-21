@@ -17,6 +17,7 @@ define('SCWS_URL', plugins_url('', __FILE__));
 require('menu/menu-ui.php');
 
 require('ajax/db-scan.php');
+require('ajax/file-scan.php');
 
 
 /*
