@@ -67,6 +67,16 @@ function scws_menu_file_scan() {
 
           });
 
+          $(document).on('click', '#result li', function(e){
+               e.preventDefault();
+               e.stopPropagation();
+               $(this).toggleClass('open');
+          });
+
+          $(document).on('click', '#result li .a', function(e){
+               e.stopPropagation();
+          });
+
      });
      </script>
 

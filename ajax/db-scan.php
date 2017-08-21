@@ -86,31 +86,9 @@ function scws_db_scan_ajax() {
                                    $wordFound = $f[0];
                                    $wordFoundAmount = $f[1];
                                    $foundTotal += $wordFoundAmount;
-                                   $string = '';
-                                   $rowText = htmlspecialchars($rowText);
+                                  // $string = '';
 
-                                   //If row too big, lets cut it
-                                   if (strlen($rowText) > 100) {
-
-                                        //Get the regex for the word
-                                        $regex = scws_get_regex($wordFound, false);
-
-                                        //Get the point where it is
-                                        preg_match_all( $regex, $rowText, $matches, PREG_OFFSET_CAPTURE);
-                                        
-                                        //Replace the word for the bold version
-                                        $rowText = preg_replace( $regex, '<strong>'. $wordFound .'</strong>', $rowText );
-                                        
-                                        foreach($matches[0] as $match) {
-                                             $offset = $match[1];
-
-                                             //Cut the string
-                                             $string .= '[...] '. substr($rowText, $offset-50, 100) . ' [...] ';
-                                        }
-                                        
-                                   } else {
-                                        $string .= '<strong>'. $rowText . '</strong>';
-                                   }
+                                   $string = scws_feature_word( $rowText, $wordFound );
 
                                    /*
                                     * $return = array( TABLE_NAME, COLUMN_NAME, WORD_FOUND, AMOUNT_FOUND, STRING, KEY )

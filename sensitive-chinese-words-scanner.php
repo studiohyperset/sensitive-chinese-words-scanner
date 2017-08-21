@@ -5,7 +5,7 @@
 Plugin Name:  The Great Firewords of China
 Plugin URI:   #
 Description:  Scan your website for words and phrases that Chinese government considers sensitive. Edit or remove content the plugin identifies, and decrease the chance your site will be blocked in China. If your site's already being blocked, this plugin can help you discover possible reasons why.
-Version:      0.1.1
+Version:      0.2.0
 Author:       Studio Hyperset
 Author URI:   https://www.studiohyperset.com
 Text Domain:  sensitive-chinese
@@ -115,4 +115,53 @@ function scws_search_words_in_text( $words = null, $text ) {
 	}
 
 	return $return;
+}
+
+
+
+/*
+ * THis function check a string and feature
+ * where the word is at.
+ */
+//If row too big, lets cut it
+function scws_feature_word( $text, $word ) {
+
+	//Remove special chars for output purpouses
+	$text = htmlspecialchars($text);
+
+	//Get the regex for the word
+	$regex = scws_get_regex($word, false);
+	
+	//Get the point where it is
+	preg_match_all( $regex, $text, $matches, PREG_OFFSET_CAPTURE);
+	
+	//Replace the word for the bold version
+	$text = preg_replace( $regex, '<strong>'. $word .'</strong>', $text );
+	
+	//Check if text is big enough for a cut
+	if (strlen($text) > 100) {
+		
+		$return = '';
+		$i = 0;
+
+		foreach($matches[0] as $match) {
+			$offset = $match[1];
+
+			//Increase offset by number of matches.
+			//This is necessary due to the insertion of strong tag
+			$offset += $i*17;
+			$i++;
+
+			//Cut the string
+			$return .= '[...] '. substr($text, $offset-50, 100) . ' [...] ';
+		}
+		
+	} else {
+		
+		$return = $text;
+
+	}
+
+	return $return;
+
 }

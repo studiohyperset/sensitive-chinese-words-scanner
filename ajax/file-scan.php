@@ -76,10 +76,81 @@ function scws_file_scan() {
      }
      
      //Let's scan each file for sensitive words
-     var_dump($files);
-     die();
+     $words = scws_get_words();
+     $return = array();
+     $remove = strlen($path);
      foreach($files as $file) {
           set_time_limit(30);
+          //Get current file content
+          $text = file_get_contents($file);
 
+          //Check if any sensitive word found
+          $justFound = scws_search_words_in_text( $words, $text );
+          if (!empty($justFound)) {
+
+               //Cycle through them and indicates the string
+               foreach ($justFound as $f) {
+                    
+                    $wordFound = $f[0];
+                    $wordFoundAmount = $f[1];
+                    $string = scws_feature_word( $text, $wordFound );
+
+                    /*
+                    * $return = array( FILE_NAME, WORD_FOUND, AMOUNT_FOUND, STRING )
+                    */
+                    $filename = $file;
+                    if ($type == 'P'){
+                         if ( count($pluginFolder) > 1)
+                              $filename = substr($file, $remove);
+                         else
+                              $filename = $name;
+                    } else
+                         $filename = substr($file, $remove);
+                    
+                    $return[] = array( $filename, $wordFound, $wordFoundAmount, $string );
+                    
+               }
+          }
      }
+
+     //Lets output the result
+     $columnResult = '';
+     //Starting mount the link to file editor
+     $folder = explode('/', $name);
+     //if (count($folder) > 1)
+          //$name = $folder[0];
+
+     if (is_multisite())
+          $url = 'network_admin_url';
+     else
+          $url = 'admin_url';
+          
+
+     if ($type == 'T')
+          $link = $url( 'theme-editor.php?theme='. $name .'&file=');
+     else
+          $link = $url( 'plugin-editor.php?plugin='. $name .'&file=');
+
+     if (count($return) > 0) {
+          foreach($return as $res) {
+               //Mount the link to the file editor
+               $edit = '';
+               if (count($folder) > 1)
+                    $edit = $folder[0] . '/' . $res[0];
+               else
+                    $edit = $res[0];
+               
+               $columnResult .= '<li>'. $res[1] .' <strong>('. $res[2] .')</strong> 
+                    <div class="edit" data-plugin="'. $name .'" data-word="'. $res[1] .'" data-file="'. $res[0] .'">
+                         <div class="text-block"><i>'. $res[0] .'</i> '. $res[3] .'</div>
+                         <div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file at the WP File Editor.', 'sensitive-chinese') . '</a></div>
+                    </div>
+               </li>';
+          }
+     } else {
+          scws_ajax_die( '', __('No sensitive words found in this plugin.', 'sensitive-chinese'), 'div', '' );
+     }
+
+     scws_ajax_die('', $columnResult, 'div', '');
+
 }
