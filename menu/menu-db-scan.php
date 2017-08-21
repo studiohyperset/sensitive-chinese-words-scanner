@@ -9,16 +9,6 @@ function scws_menu_db_scan() {
 
      <?php $report = get_option( 'scws_db_report', '' ); ?>
 
-     <?php if (empty($report)) : ?>
-
-          <p><?php _e('Go ahead and scan your site DB.', 'sensitive-chinese'); ?></p>
-
-     <?php else : ?>
-
-          <?php echo $report; ?>
-
-     <?php endif; ?>
-
      <form id="scws_run_db_scan">
           <input type="hidden" name="action" value="scws_db_scan" />
           <input type="hidden" name="step" value="2" />

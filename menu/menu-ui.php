@@ -5,20 +5,28 @@
  */
 function scws_menu() {
     add_menu_page(
-        __( 'Sensitive Chinese Words Scanner', 'sensitive-chinese' ),
-        __('Sensitive Chinese', 'sensitive-chinese' ),
+        __( 'GFW', 'sensitive-chinese' ),
+        __('GFW', 'sensitive-chinese' ),
         'manage_options',
         'scws_options',
         'scws_menu_function',
         'dashicons-editor-strikethrough',
         6
     );
+    add_submenu_page( 
+        'scws_options', 
+        __( 'GFW Scanner Overview', 'sensitive-chinese' ),
+        'Overview',
+        'manage_options',
+        'scws_options', 
+        'scws_menu_function' 
+    );
 
     include('menu-db-scan.php');
     add_submenu_page( 
         'scws_options', 
-        __( 'Sensitive Chinese DB Scanner', 'sensitive-chinese' ),
-        'DB Scan',
+        __( 'GFW Database Scan', 'sensitive-chinese' ),
+        'Database Scan',
         'manage_options',
         'scws_db_scan', 
         'scws_menu_db_scan' 
@@ -27,7 +35,7 @@ function scws_menu() {
     include('menu-file-scan.php');
     add_submenu_page( 
         'scws_options', 
-        __( 'Sensitive Chinese File Scanner', 'sensitive-chinese' ),
+        __( 'GFW Theme and Plugin Scan', 'sensitive-chinese' ),
         __('File Scan', 'sensitive-chinese' ),
         'manage_options',
         'scws_file_scan', 
@@ -37,7 +45,7 @@ function scws_menu() {
     include('menu-active-scan.php');
     add_submenu_page( 
         'scws_options', 
-        __( 'Sensitive Chinese Active Scanner', 'sensitive-chinese' ),
+        __( 'GFW Active Scans', 'sensitive-chinese' ),
         __('Active Scan', 'sensitive-chinese' ),
         'manage_options',
         'scws_active_scan', 
@@ -53,17 +61,17 @@ add_action( 'admin_menu', 'scws_menu' );
 function scws_menu_function() {
     ?>
 
-    <h1><?php _e('Sensitive Chinese Words Scanner Options', 'sensitive-chinese'); ?></h1>
+    <h1><?php _e('GFW Scanner Overview', 'sensitive-chinese'); ?></h1>
 
-    <p><?php _e('Welcome to ...', 'sensitive-chinese'); ?></p>
-
-    <p><?php _e('Our plugin works in 3 fronts:', 'sensitive-chinese'); ?></p>
+    <p><?php _e('The Great Firewords of China plugin works three ways:', 'sensitive-chinese'); ?></p>
 
     <ol>
-        <li><?php _e('Scanning content in your current DB. Brief description...'); ?></li>
-        <li><?php _e('Scanning content in your theme and plugins. Brief description...'); ?></li>
-        <li><?php _e('Actively checking new content saved (like posts and comments). Brief description...'); ?></li>
+        <li><?php _e('It scans database content.'); ?></li>
+        <li><?php _e('It scans theme and plugin content.'); ?></li>
+        <li><?php _e('It actively monitors new pages, posts, and comments and alerts you when any sensitive words are added to your site.'); ?></li>
     </ol>
+
+    <p><?php sprintf(__('Please use your best judgement when editing any content the GFW plugin identifies as sensitive. The plugin relies on %sthis list%s, which contains several generic terms such as "it," "admin," and "gov." Your site won\' t necessarily run afoul of the Chinese authorities just because our plugin identifies a sensitive keyword.', 'sensitive-chinese'), '<a href="https://github.com/jasonqng/chinese-keywords" target="_blank">', "</a>"); ?></p>
 
     <?php
 }
