@@ -117,7 +117,7 @@ function scws_db_scan_ajax() {
                     $columnResult .= '<li>'. $res[2] .' <strong>('. $res[3] .')</strong> 
                          <div class="edit" data-table="'. $res[0] .'" data-column="'. $res[1] .'" data-word="'. $res[2] .'" data-key="'. $res[5] .'">
                               <div class="text-block"><i>'. $res[1] .'</i>'. $res[4] .'</div>
-                              <div class="text-change"><i>'. __('This Table has no Primary Key. You will need to edit it manually', 'sensitive-chinese') . '</i></div>
+                              <div class="text-change"><i>'. __('The plugin cannot edit this table. Please edit it using the WP editor.', 'sensitive-chinese') . '</i></div>
                          </div>
                     </li>';
                }
@@ -130,10 +130,10 @@ function scws_db_scan_ajax() {
      $return[] = 0;
      $return[] = wp_create_nonce( 'scws_db_scan_nonce_'.$step );
      if ($textColumns == 0)
-          $return[] = scws_wrap_element( __('No text columns on table', 'sensitive-chinese') . ' '. $table, 'div');
+          $return[] = scws_wrap_element( __('No text columns exist in this table.', 'sensitive-chinese') . ' '. $table, 'div');
      else {
           if ($foundTotal == 0)
-               $return[] = scws_wrap_element( __('No sensitive word found on table', 'sensitive-chinese') . ' '. $table, 'div');
+               $return[] = scws_wrap_element( __('No sensitive words found in this table.', 'sensitive-chinese') . ' '. $table, 'div');
           else
                $return[] = scws_wrap_element( $foundTotal . ' ' . __('sensitive words found on table', 'sensitive-chinese') . ' '. $table . ':<br />' . $columnResult, 'div' );
      }

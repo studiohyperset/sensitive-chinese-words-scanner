@@ -4,7 +4,7 @@
 
 Plugin Name:  The Great Firewords of China
 Plugin URI:   #
-Description:  Scan your website for words and phrases that Chinese government considers sensitive. Edit or remove content the plugin identifies, and decrease the chance your site will be blocked in China. If your site's already being blocked, this plugin can help you discover possible reasons why.
+Description:  Scan your website for words and phrases that the Chinese government considers sensitive. Edit or remove content the plugin identifies, and decrease the chance your site will be blocked in China. If your site's already being blocked, this plugin can help you discover possible reasons why.
 Version:      0.2.0
 Author:       Studio Hyperset
 Author URI:   https://www.studiohyperset.com
@@ -165,3 +165,11 @@ function scws_feature_word( $text, $word ) {
 	return $return;
 
 }
+
+function plugin_add_settings_link( $links ) {
+    $settings_link = '<a href="admin.php?page=scws_options">' . __( 'Settings' ) . '</a>';
+    array_push( $links, $settings_link );
+  	return $links;
+}
+$plugin = plugin_basename( __FILE__ );
+add_filter( "plugin_action_links_$plugin", 'plugin_add_settings_link' );

@@ -63,16 +63,25 @@ function scws_menu_function() {
 
     <h1><?php _e('GFW Scanner Overview', 'sensitive-chinese'); ?></h1>
 
-    <p><?php _e('The Great Firewords of China plugin works three ways:', 'sensitive-chinese'); ?></p>
+    <p><?php _e('The Great Firewords of China plugin works in three ways:', 'sensitive-chinese'); ?></p>
 
     <ol>
         <li><?php _e('It scans database content.'); ?></li>
         <li><?php _e('It scans theme and plugin content.'); ?></li>
         <li><?php _e('It actively monitors new pages, posts, and comments and alerts you when any sensitive words are added to your site.'); ?></li>
     </ol>
+    
+    <p><?php _e('You can activate scans using the menu options in the left column.') ?></p>
 
-    <p><?php sprintf(__('Please use your best judgement when editing any content the GFW plugin identifies as sensitive. The plugin relies on %sthis list%s, which contains several generic terms such as "it," "admin," and "gov." Your site won\' t necessarily run afoul of the Chinese authorities just because our plugin identifies a sensitive keyword.', 'sensitive-chinese'), '<a href="https://github.com/jasonqng/chinese-keywords" target="_blank">', "</a>"); ?></p>
+	<p><?php _e('Please use your best judgement when editing any content the GFW plugin identifies as sensitive. The plugin relies on <a href="https://github.com/jasonqng/chinese-keywords?utm_source=StudioHyperset.com&utm_medium=Case%20Study&utm_campaign=Launch%20a%20Chinese%20Website&utm_term=StudioHyperset&utm_content=StudioHyperset" target="_blank">this list</a>, which contains several generic terms such as "it," "admin," and "gov." Your site won\' t necessarily run afoul of the Chinese authorities just because our plugin identifies a sensitive keyword.') ?></p>
+  
+  	<p><strong><?php _e('To learn how we used this plugin to help a global business intelligence company launch its marketing site on the Chinese mainland, <a href="http://studiohyperset.com/how-do-i-launch-a-chinese-website/?utm_source=GFW%20Plugin&utm_medium=Plugin&utm_campaign=Launch%20a%20Chinese%20Website" target="_blank">click here</a>.') ?></strong></p>
+  	
+  	<hr />
+  	
+<p><em>a <a href="http://studiohyperset.com/?utm_source=GFW%20Plugin&utm_medium=Plugin&utm_campaign=Launch%20a%20Chinese%20Website" target="_blank">Studio Hyperset</a> expression</em></p>
 
+   
     <?php
 }
 
