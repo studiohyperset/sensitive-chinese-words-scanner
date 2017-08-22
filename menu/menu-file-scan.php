@@ -37,6 +37,7 @@ function scws_menu_file_scan() {
                echo '</select>';
           }
           ?>
+          <input type="number" value="" min="1" placeholder="Pieces to break down" name="totalpieces" required/>
           <button><?php _e('Run File Scan', 'sensitive-chinese'); ?></button>
      </form>
 
@@ -45,24 +46,64 @@ function scws_menu_file_scan() {
      <script type="text/javascript">
      jQuery(document).ready( function($){
 
+          var currentPiece = 1,
+               currentRunning = false;
+
           $('#scws_run_file_scan').submit( function(e){
-               
+
                e.preventDefault();
+               
+               if (currentRunning === true && currentPiece == 1)
+                    return;
+               currentRunning = true;
 
                $('#result').addClass('loading');
 
                var select = $(this).children('select'),
-                    data = $(this).serialize();
+                    field = $(this).find('input[name="totalpieces"]'),
+                    data = $(this).serialize(),
+                    pieces = parseInt(field.val());
+
+               data += '&nextpiece='+ currentPiece;
 
                select.attr('disabled', 'disabled');
+               field.attr('disabled', 'disabled');
 
                //Send the form data
                $.post( ajaxurl, data, function( result ) {
 
-                    $('#result').append( result );
+                    if ( result == '0000') {
+
+                         $('#result').append( '<div>Finished early. It was not possible to break it down in so many pieces.</div>' );
+                         $('#result').removeClass('loading');
+                         select.attr('disabled', false);
+                         field.attr('disabled', false);
+                         currentPiece = 1;
+                         currentRunning = false;
+                         
+                    } else {
+
+                         $('#result').append( result );
+                         $('#result').removeClass('loading');
+                         select.attr('disabled', false);
+                         field.attr('disabled', false);
+
+                         if (currentPiece == pieces) {
+                              currentPiece = 1;
+                         } else {
+                              currentPiece++;
+                              $('#scws_run_file_scan').submit();
+                         }
+                         currentRunning = false;
+
+                    }
+
+               }).fail(function(){
+                    $('#result').append( '<div>The server timed out. Try breaking the File Scan in more pieces.</div>' );
                     $('#result').removeClass('loading');
                     select.attr('disabled', false);
-
+                    field.attr('disabled', false);
+                    currentRunning = false;
                });
 
           });
@@ -73,7 +114,7 @@ function scws_menu_file_scan() {
                $(this).toggleClass('open');
           });
 
-          $(document).on('click', '#result li .a', function(e){
+          $(document).on('click', '#result li a', function(e){
                e.stopPropagation();
           });
 

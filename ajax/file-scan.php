@@ -9,9 +9,27 @@ function scws_file_scan() {
      //Verify Nonce
      if (! wp_verify_nonce( $_POST['scws_file_scan_nonce'], 'scws_file_scan_nonce' ) )
           scws_ajax_die( '', __('Error #0! Please try again later', 'sensitive-chinese'), 'div', '' );
-
+          
      if ( empty( $_POST['file_look'] ) )
           scws_ajax_die( '', __('Error #1! Please try again later', 'sensitive-chinese'), 'div', '' );
+
+     if ( empty( $_POST['nextpiece'] ) )
+          scws_ajax_die( '', __('Error #2! Please try again later', 'sensitive-chinese'), 'div', '' );
+          
+     if ( empty( $_POST['totalpieces'] ) )
+          scws_ajax_die( '', __('Error #3! Please try again later', 'sensitive-chinese'), 'div', '' );
+     
+     $pieces = intval($_POST['totalpieces']);
+     $next = intval($_POST['nextpiece']);
+
+     if ( $pieces == 0 || $next == 0 )
+          scws_ajax_die( '', __('Error #4! Please try again later', 'sensitive-chinese'), 'div', '' );
+
+     if ( $pieces < $next ) {
+          echo '0000';
+          die();
+     }
+          
 
      $file = explode('|||', $_POST['file_look']);
      
@@ -20,67 +38,87 @@ function scws_file_scan() {
      unset($file);
 
      if ($type != 'T' && $type != 'P')
-          scws_ajax_die( '', __('Error #2! Please try again later', 'sensitive-chinese'), 'div', '' );
+          scws_ajax_die( '', __('Error #6! Please try again later', 'sensitive-chinese'), 'div', '' );
 
-     //Get the folder path to look for
-     if ($type == 'T')
-          $path = get_theme_root( $name ) . '/' . $name .'/';
-     else {
-          $pluginFolder = explode('/', $name);
-          if (count($pluginFolder) > 1)
-               $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $pluginFolder[0] . '/', __FILE__);
-          else
-               $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $name, __FILE__);
-     }
-
-     //Check if single file
-     if ( substr($path, -1) != '/')
-          $files = array( $path );
-     else {
-
-          $files = array();
-          $folderFiles = array_slice(scandir($path), 2);
-
-          $finisehd = false;
-          $i = 0;
-          $allowed = array('txt', 'php', 'js', 'doc', 'html', 'xml');
+     //Check if we have this folder files saved
+     if ( ( $files = get_transient( '_scws_files_'. $name ) ) === false ) {
           
-          set_time_limit(30);
-          //Get all files from folders and subfolders
-          while (count($folderFiles) > 0) {
+          //Get the folder path to look for
+          if ($type == 'T')
+               $path = get_theme_root( $name ) . '/' . $name .'/';
+          else {
+               $pluginFolder = explode('/', $name);
+               if (count($pluginFolder) > 1)
+                    $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $pluginFolder[0] . '/', __FILE__);
+               else
+                    $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $name, __FILE__);
+          }
 
-               $current = '';
+          //Check if single file
+          if ( substr($path, -1) != '/')
+               $files = array( $path );
+          else {
 
-               //Ignore rel path and git
-               if ( substr($folderFiles[$i], -4) != '.git' ) {
-                    
-                    $current = $path . $folderFiles[$i];
+               $files = array();
+               $folderFiles = array_slice(scandir($path), 2);
 
-                    //Check if folder. Then append all files and subfolders 
-                    if (is_dir($current)) {
-                         $subfolder = array_slice(scandir($current), 2);
-                         foreach($subfolder as $sub) {
-                              $folderFiles[] = $folderFiles[$i] . '/' . $sub;
+               $finisehd = false;
+               $i = 0;
+               $allowed = array('txt', 'php', 'js', 'doc', 'html', 'xml');
+               
+               //set_time_limit(30);
+               //Get all files from folders and subfolders
+               while (count($folderFiles) > 0) {
+
+                    $current = '';
+
+                    //Ignore rel path and git
+                    if ( substr($folderFiles[$i], -4) != '.git' ) {
+                         
+                         $current = $path . $folderFiles[$i];
+
+                         //Check if folder. Then append all files and subfolders 
+                         if (is_dir($current)) {
+                              $subfolder = array_slice(scandir($current), 2);
+                              foreach($subfolder as $sub) {
+                                   $folderFiles[] = $folderFiles[$i] . '/' . $sub;
+                              }
                          }
+
                     }
 
+                    //Check if file is proper extension
+                    if ( in_array( pathinfo($current, PATHINFO_EXTENSION), $allowed ) )
+                         $files[] = $current;
+
+                    unset($folderFiles[$i]);
+                    $i++;
                }
-
-               //Check if file is proper extension
-               if ( in_array( pathinfo($current, PATHINFO_EXTENSION), $allowed ) )
-                    $files[] = $current;
-
-               unset($folderFiles[$i]);
-               $i++;
           }
+
+          set_transient( '_scws_files_'. $name, $files, 600 );
+
      }
+
+     //Let's break the pieces
+     $total = count($files);
+     if ( $pieces > $total ) {
+          $pieces = $total;
+     }
+     if ($next > $pieces) {
+          echo '0000';
+          die();
+     }
+     $pieceSize = $total/$pieces;
+     $next--;
+     $files = array_slice( $files, $next * $pieceSize, $pieceSize  );
      
      //Let's scan each file for sensitive words
      $words = scws_get_words();
      $return = array();
      $remove = strlen($path);
      foreach($files as $file) {
-          set_time_limit(30);
+          //set_time_limit(1);
           //Get current file content
           $text = file_get_contents($file);
 
@@ -114,11 +152,10 @@ function scws_file_scan() {
      }
 
      //Lets output the result
-     $columnResult = '';
+     $next++;
+     $columnResult = 'Result '. $next . ' of '. $pieces;
      //Starting mount the link to file editor
      $folder = explode('/', $name);
-     //if (count($folder) > 1)
-          //$name = $folder[0];
 
      if (is_multisite())
           $url = 'network_admin_url';
