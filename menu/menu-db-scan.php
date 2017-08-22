@@ -5,7 +5,7 @@
 function scws_menu_db_scan() {
      ?>
      
-     <h1><?php _e('Sensitive Chinese Words Scanner', 'sensitive-chinese'); ?> -  <?php _e('DB Scan', 'sensitive-chinese'); ?></h1>
+     <h1><?php _e('Database Scan', 'sensitive-chinese'); ?></h1>
 
      <form id="scws_run_db_scan">
           <input type="hidden" name="action" value="scws_db_scan" />

@@ -5,7 +5,7 @@
 function scws_menu_active_scan() {
      ?>
 
-     <h1><?php _e('GFW Active Scans', 'sensitive-chinese'); ?></h1>
+     <h1><?php _e('Active Scan Results', 'sensitive-chinese'); ?></h1>
 
      <?php $report = get_option( 'scws_active_report', '' ); ?>
 

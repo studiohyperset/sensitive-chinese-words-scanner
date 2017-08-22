@@ -5,7 +5,7 @@
 function scws_menu_file_scan() {
      ?>
 
-     <h1><?php _e('GFW Theme and Plugin Scan', 'sensitive-chinese'); ?></h1>
+     <h1><?php _e('File Scan', 'sensitive-chinese'); ?></h1>
 
      <p><?php _e('GFW will scan all the following filetypes: txt, php, js, doc, html & xml.', 'sensitive-chinese'); ?></p>
           
