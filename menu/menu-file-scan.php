@@ -8,6 +8,8 @@ function scws_menu_file_scan() {
      <h1><?php _e('File Scan', 'sensitive-chinese'); ?></h1>
 
      <p><?php _e('GFW will scan all the following filetypes: txt, php, js, doc, html & xml.', 'sensitive-chinese'); ?></p>
+         
+         <p style="margin-right:20px"><?php _e('If you experience timeout issues when trying to scan a large directory, use the "Number of Searches" field to break that search into smaller units. For example, if you entered "2" in that field, GFW would break the scan into two searches. Feel free to use "1" for smaller directories.'); ?></p>
           
      <form id="scws_run_file_scan">
           <input type="hidden" name="action" value="scws_file_scan" />
@@ -37,7 +39,7 @@ function scws_menu_file_scan() {
                echo '</select>';
           }
           ?>
-          <input type="number" value="" min="1" placeholder="Pieces to break down" name="totalpieces" required/>
+          <input type="number" value="" style="width:300px" min="1" placeholder="Number of Searches" name="totalpieces" required/>
           <button><?php _e('Run File Scan', 'sensitive-chinese'); ?></button>
      </form>
 

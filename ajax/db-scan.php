@@ -130,12 +130,12 @@ function scws_db_scan_ajax() {
      $return[] = 0;
      $return[] = wp_create_nonce( 'scws_db_scan_nonce_'.$step );
      if ($textColumns == 0)
-          $return[] = scws_wrap_element( __('No text columns exist in this table.', 'sensitive-chinese') . ' '. $table, 'div');
+          $return[] = scws_wrap_element( __('No text columns exist in this table:', 'sensitive-chinese') . ' '. $table, 'div');
      else {
           if ($foundTotal == 0)
-               $return[] = scws_wrap_element( __('No sensitive words found in this table.', 'sensitive-chinese') . ' '. $table, 'div');
+               $return[] = scws_wrap_element( __('No sensitive words found in this table:', 'sensitive-chinese') . ' '. $table, 'div');
           else
-               $return[] = scws_wrap_element( $foundTotal . ' ' . __('sensitive words found on table', 'sensitive-chinese') . ' '. $table . ':<br />' . $columnResult, 'div' );
+               $return[] = scws_wrap_element( $foundTotal . ' ' . __('sensitive words found in this table:', 'sensitive-chinese') . ' '. $table . '<br />' . $columnResult, 'div' );
      }
 
      scws_ajax_die($step, $return, 'div');
