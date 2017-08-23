@@ -76,7 +76,7 @@ function scws_menu_file_scan() {
 
                     if ( result == '0000') {
 
-                         $('#result').append( '<div>Finished early. It was not possible to break it down in so many pieces.</div>' );
+                         $('#result').append( '<div>Finished search early. It was not necessary to use the number of individual searches you requested.</div>' );
                          $('#result').removeClass('loading');
                          select.attr('disabled', false);
                          field.attr('disabled', false);
@@ -101,7 +101,7 @@ function scws_menu_file_scan() {
                     }
 
                }).fail(function(){
-                    $('#result').append( '<div>The server timed out. Try breaking the File Scan in more pieces.</div>' );
+                    $('#result').append( '<div>The server timed out. Try entering a larger number in the "Number of Searches" field.</div>' );
                     $('#result').removeClass('loading');
                     select.attr('disabled', false);
                     field.attr('disabled', false);

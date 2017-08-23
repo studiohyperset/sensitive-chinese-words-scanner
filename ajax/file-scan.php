@@ -180,7 +180,7 @@ function scws_file_scan() {
                $columnResult .= '<li>'. $res[1] .' <strong>('. $res[2] .')</strong> 
                     <div class="edit" data-plugin="'. $name .'" data-word="'. $res[1] .'" data-file="'. $res[0] .'">
                          <div class="text-block"><i>'. $res[0] .'</i> '. $res[3] .'</div>
-                         <div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file at the WP File Editor.', 'sensitive-chinese') . '</a></div>
+                         <div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file using the WP file editor.', 'sensitive-chinese') . '</a></div>
                     </div>
                </li>';
           }
