@@ -64,7 +64,7 @@ function scws_file_scan() {
 
                $finisehd = false;
                $i = 0;
-               $allowed = array('txt', 'php', 'js', 'doc', 'html', 'xml');
+               $allowed = scws_get_file_types();
                
                //set_time_limit(30);
                //Get all files from folders and subfolders

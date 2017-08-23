@@ -5,7 +5,7 @@
 Plugin Name:  The Great Firewords of China
 Plugin URI:   http://studiohyperset.com/how-do-i-launch-a-chinese-website/
 Description:  Scan your website for words and phrases that the Chinese government considers sensitive. Edit or remove content the plugin identifies, and decrease the chance your site will be blocked by the Great Firewall of China. If your site's already being blocked, this plugin can help you discover possible reasons why.
-Version:      0.2.1
+Version:      0.2.2
 Author:       Studio Hyperset
 Author URI:   https://www.studiohyperset.com
 Text Domain:  sensitive-chinese
@@ -120,10 +120,9 @@ function scws_search_words_in_text( $words = null, $text ) {
 
 
 /*
- * THis function check a string and feature
+ * This function check a string and feature
  * where the word is at.
  */
-//If row too big, lets cut it
 function scws_feature_word( $text, $word ) {
 
 	//Remove special chars for output purpouses
@@ -166,10 +165,33 @@ function scws_feature_word( $text, $word ) {
 
 }
 
+
+/*
+ * Add a settings link in plugin list page
+ */
 function plugin_add_settings_link( $links ) {
-    $settings_link = '<a href="admin.php?page=scws_options">' . __( 'Settings' ) . '</a>';
-    array_push( $links, $settings_link );
-  	return $links;
+	$settings_link = '<a href="admin.php?page=scws_options">' . __( 'Settings' ) . '</a>';
+	array_push( $links, $settings_link );
+	return $links;
 }
 $plugin = plugin_basename( __FILE__ );
 add_filter( "plugin_action_links_$plugin", 'plugin_add_settings_link' );
+
+
+
+/*
+ * Return the file types that we will search for
+ */
+function scws_get_file_types() {
+	return array('txt', 'php', 'js', 'doc', 'html', 'xml');
+}
+
+
+/*
+ * Allow editor to edit custom file formats
+ */
+add_filter('wp_theme_editor_filetypes', 'scws_editor_filetypes');
+add_filter('editable_extensions', 'scws_editor_filetypes');
+function scws_editor_filetypes( $types ) {
+    return array_unique( array_merge( scws_get_file_types(), $types ) );
+}
