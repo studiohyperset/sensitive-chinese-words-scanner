@@ -1,7 +1,28 @@
 <?php
+/********************************
+ *
+ * This file include functions related
+ * with admin & plugin UI
+ *
+ ********************************/
+
+
 
 /*
- * Register the Menu Page
+ * Add a settings link in plugin list page
+ */
+function plugin_add_settings_link( $links ) {
+	$settings_link = '<a href="admin.php?page=scws_options">' . __( 'Settings' ) . '</a>';
+	array_push( $links, $settings_link );
+	return $links;
+}
+$plugin = plugin_basename( __FILE__ );
+add_filter( "plugin_action_links_$plugin", 'plugin_add_settings_link' );
+
+
+
+/*
+ * Register the Menu Pages
  */
 function scws_menu() {
     add_menu_page(
@@ -22,7 +43,7 @@ function scws_menu() {
         'scws_menu_function' 
     );
 
-    include('menu-db-scan.php');
+    include( SCWS_PATH . '/menu/menu-db-scan.php');
     add_submenu_page( 
         'scws_options', 
         __( 'GFW Database Scan', 'sensitive-chinese' ),
@@ -32,7 +53,7 @@ function scws_menu() {
         'scws_menu_db_scan' 
     );
 
-    include('menu-file-scan.php');
+    include( SCWS_PATH . '/menu/menu-file-scan.php');
     add_submenu_page( 
         'scws_options', 
         __( 'GFW Theme and Plugin Scan', 'sensitive-chinese' ),
@@ -42,7 +63,7 @@ function scws_menu() {
         'scws_menu_file_scan' 
     );
 
-    include('menu-active-scan.php');
+    include( SCWS_PATH . '/menu/menu-active-scan.php');
     add_submenu_page( 
         'scws_options', 
         __( 'GFW Active Scans', 'sensitive-chinese' ),
@@ -53,6 +74,7 @@ function scws_menu() {
     );
 }
 add_action( 'admin_menu', 'scws_menu' );
+
 
 
 /*
@@ -79,7 +101,7 @@ function scws_menu_function() {
   	
   	<hr />
   	
-<p><em>a <a href="http://studiohyperset.com/?utm_source=GFW_Plugin&utm_medium=Plugin&utm_campaign=Launch%20a%20Chinese%20Website" target="_blank">Studio Hyperset</a> expression</em></p>
+    <p><em>a <a href="http://studiohyperset.com/?utm_source=GFW_Plugin&utm_medium=Plugin&utm_campaign=Launch%20a%20Chinese%20Website" target="_blank">Studio Hyperset</a> expression</em></p>
 
    
     <?php
