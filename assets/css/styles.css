@@ -38,6 +38,43 @@
   vertical-align: middle;
   cursor: pointer;
 }
+.gfw_page_scws_db_scan table tr,
+.gfw_page_scws_file_scan table tr,
+.gfw_page_scws_active_scan table tr,
+.toplevel_page_scws_options table tr {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.gfw_page_scws_db_scan table td,
+.gfw_page_scws_file_scan table td,
+.gfw_page_scws_active_scan table td,
+.toplevel_page_scws_options table td {
+  padding: 10px;
+  vertical-align: top;
+}
+.gfw_page_scws_db_scan table td label,
+.gfw_page_scws_file_scan table td label,
+.gfw_page_scws_active_scan table td label,
+.toplevel_page_scws_options table td label {
+  font-weight: bold;
+  color: #999;
+}
+.gfw_page_scws_db_scan table td p,
+.gfw_page_scws_file_scan table td p,
+.gfw_page_scws_active_scan table td p,
+.toplevel_page_scws_options table td p {
+  margin: 0;
+}
+.gfw_page_scws_db_scan table td input,
+.gfw_page_scws_file_scan table td input,
+.gfw_page_scws_active_scan table td input,
+.toplevel_page_scws_options table td input,
+.gfw_page_scws_db_scan table td select,
+.gfw_page_scws_file_scan table td select,
+.gfw_page_scws_active_scan table td select,
+.toplevel_page_scws_options table td select {
+  background: #f6f6f6;
+}
 .gfw_page_scws_db_scan #result,
 .gfw_page_scws_file_scan #result,
 .gfw_page_scws_active_scan #result,
@@ -115,4 +152,25 @@
 .toplevel_page_scws_options #result.loading:after {
   content: 'Loading...';
   display: block;
+}
+.gfw_page_scws_db_scan li.recent-scan,
+.gfw_page_scws_file_scan li.recent-scan,
+.gfw_page_scws_active_scan li.recent-scan,
+.toplevel_page_scws_options li.recent-scan {
+  display: block;
+  padding: 5px 10px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  list-style: none;
+  margin: 0;
+}
+.gfw_page_scws_db_scan li.recent-scan span,
+.gfw_page_scws_file_scan li.recent-scan span,
+.gfw_page_scws_active_scan li.recent-scan span,
+.toplevel_page_scws_options li.recent-scan span {
+  display: inline-block;
+  border: 1px solid #ddd;
+  background: #ddd;
+  padding: 5px;
+  vertical-align: middle;
 }

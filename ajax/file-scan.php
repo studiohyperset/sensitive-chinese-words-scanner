@@ -39,20 +39,20 @@ function scws_file_scan() {
 
      if ($type != 'T' && $type != 'P')
           scws_ajax_die( '', __('Error #6! Please try again later', 'sensitive-chinese'), 'div', '' );
+          
+     //Get the folder path to look for
+     if ($type == 'T')
+          $path = get_theme_root( $name ) . '/' . $name .'/';
+     else {
+          $pluginFolder = explode('/', $name);
+          if (count($pluginFolder) > 1)
+               $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $pluginFolder[0] . '/', __FILE__);
+          else
+               $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $name, __FILE__);
+     }
 
      //Check if we have this folder files saved
      if ( ( $files = get_transient( '_scws_files_'. $name ) ) === false ) {
-          
-          //Get the folder path to look for
-          if ($type == 'T')
-               $path = get_theme_root( $name ) . '/' . $name .'/';
-          else {
-               $pluginFolder = explode('/', $name);
-               if (count($pluginFolder) > 1)
-                    $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $pluginFolder[0] . '/', __FILE__);
-               else
-                    $path = str_replace('sensitive-chinese-words-scanner\ajax\file-scan.php', $name, __FILE__);
-          }
 
           //Check if single file
           if ( substr($path, -1) != '/')
@@ -64,7 +64,7 @@ function scws_file_scan() {
 
                $finisehd = false;
                $i = 0;
-               $allowed = array('txt', 'php', 'js', 'doc', 'html', 'xml');
+               $allowed = scws_get_file_types();
                
                //set_time_limit(30);
                //Get all files from folders and subfolders
@@ -134,9 +134,8 @@ function scws_file_scan() {
                     $string = scws_feature_word( $text, $wordFound );
 
                     /*
-                    * $return = array( FILE_NAME, WORD_FOUND, AMOUNT_FOUND, STRING )
+                    * $return = array( FILE_NAME, WORD_FOUND, AMOUNT_FOUND, STRING, FOLDER_LEVEL, FILE_TYPE )
                     */
-                    $filename = $file;
                     if ($type == 'P'){
                          if ( count($pluginFolder) > 1)
                               $filename = substr($file, $remove);
@@ -145,7 +144,7 @@ function scws_file_scan() {
                     } else
                          $filename = substr($file, $remove);
                     
-                    $return[] = array( $filename, $wordFound, $wordFoundAmount, $string );
+                    $return[] = array( $filename, $wordFound, $wordFoundAmount, $string, substr_count( $filename , '/' ), pathinfo($filename, PATHINFO_EXTENSION) );
                     
                }
           }
@@ -177,12 +176,23 @@ function scws_file_scan() {
                else
                     $edit = $res[0];
                
-               $columnResult .= '<li>'. $res[1] .' <strong>('. $res[2] .')</strong> 
-                    <div class="edit" data-plugin="'. $name .'" data-word="'. $res[1] .'" data-file="'. $res[0] .'">
-                         <div class="text-block"><i>'. $res[0] .'</i> '. $res[3] .'</div>
-                         <div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file using the WP file editor.', 'sensitive-chinese') . '</a></div>
-                    </div>
-               </li>';
+               $columnResult .= '<li>';
+                    $columnResult .= $res[1];
+                    $columnResult .= ' <strong>('. $res[2] .')</strong> ';
+                    $columnResult .= '<div class="edit" data-plugin="'. $name .'" data-word="'. $res[1] .'" data-file="'. $res[0] .'">';
+                         $columnResult .= '<div class="text-block"><i>'. $res[0] .'</i> '. $res[3] .'</div>';
+                         
+                         //Check if editable. 
+                         //For Theme should be level 0 for CSS or level 0 or 1
+                         //For Plugin should be level 0 or 1
+                         if ( ( $type == 'T' && $res[5] == 'css' && $res[4] === 0 ) || ( $res[4] <= 1 ) ) {
+                              $columnResult .= '<div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file at the WP File Editor.', 'sensitive-chinese') . '</a></div>';
+                         } else {
+                              $columnResult .= '<div class="text-change">'. __('This file is not editable through the panel. Please edit it through FTP or other way. You will find it in this path', 'sensitive-chinese') . ': '. $path . $res[0] .'</div>';
+                         }
+
+                    $columnResult .= '</div>';
+               $columnResult .= '</li>';
           }
      } else {
           scws_ajax_die( '', __('No sensitive words found in this plugin.', 'sensitive-chinese'), 'div', '' );
