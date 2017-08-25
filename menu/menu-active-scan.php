@@ -20,7 +20,7 @@ function scws_menu_active_scan() {
                          <option value="yes" <?php selected( 'yes', $option, true ); ?>><?php _e('Yes', 'sensitive-chinese'); ?></option>
                          <option value="no" <?php selected( 'no', $option, true ); ?>><?php _e('No', 'sensitive-chinese'); ?></option>
                     </select>
-                    <p><em><?php _e('When enabled, the plugin will check for sensitive words in new content saved in the website.', 'sensitive-chinese'); ?></em></p>
+                    <p><em><?php _e('Select "Yes" to actively monitor new page, post, comment, user and terms content for sensitive  keywords.', 'sensitive-chinese'); ?></em></p>
                </td>
           </tr>
           <tr>
@@ -33,8 +33,8 @@ function scws_menu_active_scan() {
                          <option value="yes" <?php selected( 'yes', $option, true ); ?>><?php _e('Yes', 'sensitive-chinese'); ?></option>
                          <option value="no" <?php selected( 'no', $option, true ); ?>><?php _e('No', 'sensitive-chinese'); ?></option> 
                     </select>
-                    <input type="email" name="active_scan_warn_email" id="active_scan_warn_email" value="<?php echo get_option( 'scws_active_scan_warn_email', '' ); ?>" placeholder="<?php _e('Your email', 'sensitive-chinese'); ?>" />
-                    <p><em><?php _e('When a new detection is catch, this email will receive an alert email.', 'sensitive-chinese'); ?></em></p>
+                    <input type="email" name="active_scan_warn_email" id="active_scan_warn_email" value="<?php echo get_option( 'scws_active_scan_warn_email', '' ); ?>" placeholder="<?php _e('Email Address', 'sensitive-chinese'); ?>" />
+                    <p><em><?php _e('Select "Yes" and enter your name and email address to receive an alert when the plugin detects a new sensitive keyword.', 'sensitive-chinese'); ?></em></p>
                </td>
           </tr>
           <?php /*<tr>
@@ -53,7 +53,6 @@ function scws_menu_active_scan() {
           </tr> */ ?>
      </table>
 
-     
      <script type="text/javascript">
      jQuery(document).ready( function($){
      
@@ -147,7 +146,7 @@ function scws_menu_active_scan() {
 
      <?php if (empty($report)) : ?>
 
-          <p><?php _e('This plugin hans\'t reviewed any new content yet.', 'sensitive-chinese'); ?></p>
+          <p><?php _e('The plugin hasn\'t identified any sensitive content yet.', 'sensitive-chinese'); ?></p>
 
      <?php else : ?>
 
