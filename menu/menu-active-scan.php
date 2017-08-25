@@ -20,7 +20,7 @@ function scws_menu_active_scan() {
                          <option value="yes" <?php selected( 'yes', $option, true ); ?>><?php _e('Yes', 'sensitive-chinese'); ?></option>
                          <option value="no" <?php selected( 'no', $option, true ); ?>><?php _e('No', 'sensitive-chinese'); ?></option>
                     </select>
-                    <p><em><?php _e('Select "Yes" to actively monitor new page, post, and comment content for sensitive  keywords.', 'sensitive-chinese'); ?></em></p>
+                    <p><em><?php _e('Select "Yes" to actively monitor new page, post, comment, user and terms content for sensitive  keywords.', 'sensitive-chinese'); ?></em></p>
                </td>
           </tr>
           <tr>
@@ -37,7 +37,7 @@ function scws_menu_active_scan() {
                     <p><em><?php _e('Select "Yes" and enter your name and email address to receive an alert when the plugin detects a new sensitive keyword.', 'sensitive-chinese'); ?></em></p>
                </td>
           </tr>
-          <tr>
+          <?php /*<tr>
                <td>
                     <label for="active_scan_autoreplace"><?php _e('Auto replace sensitive words?', 'sensitive-chinese'); ?></label>
                </td>
@@ -50,32 +50,9 @@ function scws_menu_active_scan() {
                     <input type="text" name="active_scan_autoreplace_word" id="active_scan_autoreplace_word" value="<?php echo get_option( 'scws_active_scan_autoreplace_word', '' ); ?>" placeholder="" />
                     <p><em><?php _e('When a new detection is catch, the plugin will replace the sensitive word with this word.', 'sensitive-chinese'); ?></em></p>
                </td>
-          </tr>
+          </tr> */ ?>
      </table>
 
-     <div id="result"></div>
-
-     <h2><?php _e('Recent Scans', 'sensitive-chinese'); ?></h2>
-
-     <?php $report = get_option( 'scws_active_report', array() ); ?>
-
-     <?php if (empty($report)) : ?>
-
-          <p><?php _e('The plugin hasn\'t identified any sensitive content yet.', 'sensitive-chinese'); ?></p>
-
-     <?php else : ?>
-
-          <?php $report = array_reverse($report); ?>
-
-          <?php foreach ($report as $r) : ?>
-               
-               <?php echo '<li class="recent-scan">'. $r . '</li>'; ?>
-          
-          <?php endforeach; ?>
-
-     <?php endif; ?>
-
-     
      <script type="text/javascript">
      jQuery(document).ready( function($){
      
@@ -160,5 +137,27 @@ function scws_menu_active_scan() {
 
      });
      </script>
+
+     <div id="result"></div>
+
+     <h2><?php _e('Recent Scans', 'sensitive-chinese'); ?></h2>
+
+     <?php $report = get_option( 'scws_active_report', array() ); ?>
+
+     <?php if (empty($report)) : ?>
+
+          <p><?php _e('The plugin hasn\'t identified any sensitive content yet.', 'sensitive-chinese'); ?></p>
+
+     <?php else : ?>
+
+          <?php $report = array_reverse($report); ?>
+
+          <?php foreach ($report as $r) : ?>
+               
+               <?php echo '<li class="recent-scan">'. $r . '</li>'; ?>
+          
+          <?php endforeach; ?>
+
+     <?php endif; ?>
      <?php
 }
