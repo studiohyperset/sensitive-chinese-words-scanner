@@ -16,8 +16,7 @@ function plugin_add_settings_link( $links ) {
 	array_push( $links, $settings_link );
 	return $links;
 }
-$plugin = plugin_basename( __FILE__ );
-add_filter( "plugin_action_links_$plugin", 'plugin_add_settings_link' );
+add_filter( "plugin_action_links_". SCWS_NAME, 'plugin_add_settings_link' );
 
 
 
