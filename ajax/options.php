@@ -24,6 +24,41 @@ function scws_save_options() {
     else
         update_option( 'scws_' . $option, $_POST[$option] );
 
+    if ($option == 'active_scan_warn_email') {
+        //Send it to HubSpot
+        $hubspotutk = $_COOKIE['hubspotutk'];
+        $ip_addr = $_SERVER['REMOTE_ADDR']; //IP address too.
+        $hs_context = array(
+            'hutk' => $hubspotutk,
+            'ipAddress' => $ip_addr
+        );
+        $hs_context_json = json_encode($hs_context);
+
+        //replace the values in this URL with your portal ID and your form GUID
+        $url = 'https://forms.hubspot.com/uploads/form/v2/550584/0018c43f-2093-4b23-94b1-ab25db01aeef';
+
+        $postdata = http_build_query(
+            array(
+                'firstname' => urlencode( get_option('scws_activation_firstname', '') ),
+                'lastname' => urlencode( get_option('scws_activation_lastname', '') ),
+                'email' => $_POST[$option],
+                'hs_context' => $hs_context_json
+            )
+        );
+
+        $opts = array('http' =>
+            array(
+                'method'  => 'POST',
+                'header'  => 'Content-type: application/x-www-form-urlencoded',
+                'content' => $postdata
+            )
+        );
+
+        $context  = stream_context_create($opts);
+
+        $result = @file_get_contents($url, false, $context);
+    }
+
     die('1');     
 }
 
