@@ -14,65 +14,138 @@
  */
 function scws_active_scan_do_actions( $founds ) {
 
-     global $wpdb;
-     
-     //Save in the log
-     $report = get_option( 'scws_active_report', array() );
+    global $wpdb;
+    
+    //Save in the log
+    $report = get_option( 'scws_active_report', array() );
 
-     foreach ( $founds as $found ) {
+    //Store in the email variable
+    // array( word, location )
+    $email = array();
 
-          //Third item of array will show us
-          //where the word was found
-          switch ( $found[2] ) {
-               case $wpdb->prefix . 'posts':
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of post <a href="'. admin_url( 'post.php?post='. $found[5] .'&action=edit' ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->prefix . 'postmeta':
-                    $meta = get_metadata_by_mid( 'post', $found[4] );
-                    $meta = $meta->meta_key;
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of post <a href="'. admin_url( 'post.php?post='. $found[5] .'&action=edit' ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->prefix . 'comments':
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of comment <a href="'. admin_url( 'comment.php?action=editcomment&c='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->prefix . 'commentmeta':
-                    $meta = get_metadata_by_mid( 'comment', $found[4] );
-                    $meta = $meta->meta_key;
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of comment <a href="'. admin_url( 'comment.php?action=editcomment&c='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->prefix . 'terms':
-               case $wpdb->prefix . 'term_taxonomy':
-                    $term = get_term( $found[5] );
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of term <a href="'. admin_url( 'term.php?taxonomy='. $term->taxonomy .'&tag_ID='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->prefix . 'termmeta':
-                    $term = get_term( $found[5] );
-                    $meta = get_metadata_by_mid( 'term', $found[4] );
-                    $meta = $meta->meta_key;
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of term <a href="'. admin_url( 'term.php?taxonomy='. $term->taxonomy .'&tag_ID='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->base_prefix . 'users':
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of user <a href="'. admin_url( 'user-edit.php?user_id='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               case $wpdb->base_prefix . 'usermeta':
-                    $meta = get_metadata_by_mid( 'user', $found[4] );
-                    $meta = $meta->meta_key;
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of user <a href="'. admin_url( 'user-edit.php?user_id='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
-               break;
-               default :
-                    $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[2] .'</i> in <i>'. $found[3] .'</i> with ID <i>'. $found[4] .'</i>  and parent ID <i>'. $found[5] .'</i>. <span>'. $found[1] .'</span>';
-          }
+    foreach ( $founds as $found ) {
+        $url = '';
 
-     }
-     
-     if (count($report) > 100)
-          $report = array_slice( $report, -100);
+        //Third item of array will show us
+        //where the word was found
+        switch ( $found[2] ) {
+            case $wpdb->prefix . 'posts':
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of post <a href="'. admin_url( 'post.php?post='. $found[5] .'&action=edit' ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = '<i>'. ucwords($found[3]) .'</i> of post <a href="'. admin_url( 'post.php?post='. $found[5] .'&action=edit' ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->prefix . 'postmeta':
+                $meta = get_metadata_by_mid( 'post', $found[4] );
+                $meta = $meta->meta_key;
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of post <a href="'. admin_url( 'post.php?post='. $found[5] .'&action=edit' ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = 'Field <i>'. ucwords($meta) .'</i> of post <a href="'. admin_url( 'post.php?post='. $found[5] .'&action=edit' ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->prefix . 'comments':
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of comment <a href="'. admin_url( 'comment.php?action=editcomment&c='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = '<i>'. ucwords($found[3]) .'</i> of comment <a href="'. admin_url( 'comment.php?action=editcomment&c='. $found[5] ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->prefix . 'commentmeta':
+                $meta = get_metadata_by_mid( 'comment', $found[4] );
+                $meta = $meta->meta_key;
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of comment <a href="'. admin_url( 'comment.php?action=editcomment&c='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = 'Field <i>'. ucwords($meta) .'</i> of comment <a href="'. admin_url( 'comment.php?action=editcomment&c='. $found[5] ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->prefix . 'terms':
+            case $wpdb->prefix . 'term_taxonomy':
+                $term = get_term( $found[5] );
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of term <a href="'. admin_url( 'term.php?taxonomy='. $term->taxonomy .'&tag_ID='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = '<i>'. ucwords($found[3]) .'</i> of term <a href="'. admin_url( 'term.php?taxonomy='. $term->taxonomy .'&tag_ID='. $found[5] ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->prefix . 'termmeta':
+                $term = get_term( $found[5] );
+                $meta = get_metadata_by_mid( 'term', $found[4] );
+                $meta = $meta->meta_key;
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of term <a href="'. admin_url( 'term.php?taxonomy='. $term->taxonomy .'&tag_ID='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = 'Field <i>'. ucwords($meta) .'</i> of term <a href="'. admin_url( 'term.php?taxonomy='. $term->taxonomy .'&tag_ID='. $found[5] ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->base_prefix . 'users':
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[3] .'</i> of user <a href="'. admin_url( 'user-edit.php?user_id='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = '<i>'. ucwords($found[3]) .'</i> of user <a href="'. admin_url( 'user-edit.php?user_id='. $found[5] ) .'">#'. $found[5] .'</a>';
+            break;
+            case $wpdb->base_prefix . 'usermeta':
+                $meta = get_metadata_by_mid( 'user', $found[4] );
+                $meta = $meta->meta_key;
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at custom field <i>'. $meta .'</i> of user <a href="'. admin_url( 'user-edit.php?user_id='. $found[5] ) .'">#'. $found[5] .'</a>. <span>'. $found[1] .'</span>';
+                $url = 'Field <i>'. ucwords($meta) .'</i> of user <a href="'. admin_url( 'user-edit.php?user_id='. $found[5] ) .'">#'. $found[5] .'</a>';
+            break;
+            default :
+                $report[] = 'Word <i>'. $found[0] .'</i> detected at <i>'. $found[2] .'</i> in <i>'. $found[3] .'</i> with ID <i>'. $found[4] .'</i>  and parent ID <i>'. $found[5] .'</i>. <span>'. $found[1] .'</span>';
+                $url = '<i>'. ucwords($found[3]) .'</i> in <i>'. $found[3] .'</i> with ID <i>'. $found[4] .'</i>  and parent ID <i>'. $found[5] .'</i>';
+        }
 
-     //Save the log
-     update_option( 'scws_active_report', $report );
+        $email[] = array( $found[0], $url );
+
+    }
+    
+    if (count($report) > 100)
+        $report = array_slice( $report, -100);
+
+    //Save the log
+    update_option( 'scws_active_report', $report );
+
+    scws_active_scan_do_email_submission( $email );
 
 }
 
+
+
+/*
+ * This function will send the email alert
+ */
+function scws_active_scan_do_email_submission( $report ) {
+
+    //Check if any report to send
+    if (!empty($report)) {
+
+        //Check if option is on
+        if ( get_option( 'scws_active_scan_warn', 'no' ) == 'yes' ) {
+
+            //Check if email is set
+            $to = get_option( 'scws_active_scan_warn_email', get_option('scws_activation_email', '') );
+            if ($to !== '') {
+
+                //If have more than 5 results, show only 5
+                $total = count($report);
+                if ($total > 5)
+                    $report = array_slice( $report, -5 );
+
+                //Load email templates in var
+                $inner = file_get_contents( SCWS_PATH . '/assets/email/inner.html' );
+                $body = file_get_contents( SCWS_PATH . '/assets/email/main.html' );
+
+                //Create the inner table
+                $table = '';
+                foreach( $report as $email ) {
+                    $table .= str_replace( array('%word%', '%location%'), $email, $inner );
+                }
+
+                //Show the additional words
+                if ($total > 5) {
+                    $table .= '<tr align="left" style="background: #FFFFFF; border: 0; border-collapse: collapse; border-spacing: 0" bgcolor="#FFFFFF"><td><table cellspacing="0" cellpadding="0" border="0" style="border: 0; border-collapse: collapse; border-spacing: 0; min-width: 650px"><tbody><tr style="border: 0; border-collapse: collapse; border-spacing: 0"><td width="20" height="30" bgcolor="#FFFFFF" align="left" valign="top" style="background: #FFFFFF; font-size: 1px; height: 30px; line-height: 1px; width: 20px"> </td><td width="600" align="left" valign="top" height="30" style="background: #FFFFFF; height: 30px; width: 600px" bgcolor="#FFFFFF"><!-- content start --><p style="color: #111111 !important; font-family: Open Sans; font-size: 20px; font-style: normal; font-weight: 400; line-height: 24px;  margin-top:0; padding-top:0; margin-right:0; padding-right:0; margin-bottom:0; padding-bottom:0; margin-left:0; padding-left:0;  text-shadow: none">'. ($total - 5) .' more words found. <a href="'. admin_url( 'admin.php?page=scws_active_scan' ) .'">View the full report on your site.</a></p></div><!-- content end --></td><td width="19" height="30" bgcolor="#FFFFFF" align="left" valign="top" style="background: #FFFFFF; font-size: 1px; height: 30px; line-height: 1px; width: 19px"> </td></tr></tbody></table></td></tr>';
+                }
+                
+                //Update main template
+                $body = str_replace( 
+                    array( '%firstname%', '%results%', '%shlogo%' ), 
+                    array( get_option('scws_activation_firstname', ''), $table, SCWS_PATH . '/assets/email/sh_logo.jpg'  ), 
+                    $body 
+                );
+
+                //Subject
+                $subject = 'Chinese Sensitive Content Report';
+                $headers = array('Content-Type: text/html; charset=UTF-8');
+                wp_mail( $to, $subject, $body, $headers );
+
+            }
+        }
+
+    }
+
+}
 
 
 /*
