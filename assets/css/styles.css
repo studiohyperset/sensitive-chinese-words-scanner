@@ -174,3 +174,133 @@
   padding: 5px;
   vertical-align: middle;
 }
+.gfw_page_scws_db_scan #scws_activate,
+.gfw_page_scws_file_scan #scws_activate,
+.gfw_page_scws_active_scan #scws_activate,
+.toplevel_page_scws_options #scws_activate {
+  background: #0685cf;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  left: -10px;
+}
+@media (min-width: 768px) {
+  .gfw_page_scws_db_scan #scws_activate,
+  .gfw_page_scws_file_scan #scws_activate,
+  .gfw_page_scws_active_scan #scws_activate,
+  .toplevel_page_scws_options #scws_activate {
+    width: 100%;
+    left: -20px;
+    padding-left: 20px;
+  }
+}
+.gfw_page_scws_db_scan #scws_activate .center-this,
+.gfw_page_scws_file_scan #scws_activate .center-this,
+.gfw_page_scws_active_scan #scws_activate .center-this,
+.toplevel_page_scws_options #scws_activate .center-this {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 95%;
+  left: 2.5%;
+}
+@media (min-width: 768px) {
+  .gfw_page_scws_db_scan #scws_activate .center-this,
+  .gfw_page_scws_file_scan #scws_activate .center-this,
+  .gfw_page_scws_active_scan #scws_activate .center-this,
+  .toplevel_page_scws_options #scws_activate .center-this {
+    left: 0;
+    width: 100%;
+  }
+}
+.gfw_page_scws_db_scan #scws_activate p,
+.gfw_page_scws_file_scan #scws_activate p,
+.gfw_page_scws_active_scan #scws_activate p,
+.toplevel_page_scws_options #scws_activate p {
+  font-size: 20px;
+  line-height: 1.2;
+  margin: 0 auto 30px;
+  max-width: 500px;
+}
+.gfw_page_scws_db_scan #scws_activate h2,
+.gfw_page_scws_file_scan #scws_activate h2,
+.gfw_page_scws_active_scan #scws_activate h2,
+.toplevel_page_scws_options #scws_activate h2 {
+  font-size: 40px;
+  font-weight: 600;
+  margin: 0 0 30px;
+  color: #fff;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form,
+.toplevel_page_scws_options #scws_activate .hbspt-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form form > div,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form form > div,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form form > div,
+.toplevel_page_scws_options #scws_activate .hbspt-form form > div {
+  margin: 0;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form .actions,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form .actions,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form .actions,
+.toplevel_page_scws_options #scws_activate .hbspt-form .actions {
+  padding: 0;
+  margin: 0;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form label,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form label,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form label,
+.toplevel_page_scws_options #scws_activate .hbspt-form label {
+  display: none;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form .hs-error-msgs label,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form .hs-error-msgs label,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form .hs-error-msgs label,
+.toplevel_page_scws_options #scws_activate .hbspt-form .hs-error-msgs label {
+  display: block;
+  font-size: 14px;
+  color: #fff;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form input,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form input,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form input,
+.toplevel_page_scws_options #scws_activate .hbspt-form input {
+  font-size: 16px;
+  line-height: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin: 0 0 5px;
+  border: 0;
+  background: #fff;
+  width: 100%;
+  color: #333;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.gfw_page_scws_db_scan #scws_activate .hbspt-form button,
+.gfw_page_scws_file_scan #scws_activate .hbspt-form button,
+.gfw_page_scws_active_scan #scws_activate .hbspt-form button,
+.toplevel_page_scws_options #scws_activate .hbspt-form button,
+.gfw_page_scws_db_scan #scws_activate .hbspt-form input[type="submit"],
+.gfw_page_scws_file_scan #scws_activate .hbspt-form input[type="submit"],
+.gfw_page_scws_active_scan #scws_activate .hbspt-form input[type="submit"],
+.toplevel_page_scws_options #scws_activate .hbspt-form input[type="submit"] {
+  background-color: #12be00;
+  width: 100%;
+  color: #fff;
+  line-height: 50px;
+  height: 50px;
+  font-size: 16px;
+  border-radius: 5px;
+  text-align: center;
+  border: 0;
+  box-sizing: border-box;
+  text-shadow: none;
+  box-shadow: none;
+}

@@ -1,138 +1,238 @@
 .gfw_page_scws_db_scan, .gfw_page_scws_file_scan, .gfw_page_scws_active_scan, .toplevel_page_scws_options {
 
-     #wpbody-content {
-          h1 {
-               line-height: 1em;
-               margin: 20px 0;
-               border-bottom: 1px solid #ddd;
-               padding-bottom: 20px;
-          }
-     }
+    #wpbody-content {
+        h1 {
+            line-height: 1em;
+            margin: 20px 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+    }
 
-     select, input {
-          background: #fff;
-          border: 1px solid #fff;
-          box-shadow: none;
-          line-height: 30px;
-          margin: 0 10px 0 0;
-          display: inline-block;
-          vertical-align: middle;
-          padding: 0 5px;
-          height: 30px;
-     }
+    select, input {
+        background: #fff;
+        border: 1px solid #fff;
+        box-shadow: none;
+        line-height: 30px;
+        margin: 0 10px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 5px;
+        height: 30px;
+    }
 
-     button {
-          padding: 0 20px;
-          line-height: 30px;
-          border: 0;
-          background: #333;
-          color: #fff;
-          display: inline-block;
-          vertical-align: middle;
-          cursor: pointer;
-     }
+    button {
+        padding: 0 20px;
+        line-height: 30px;
+        border: 0;
+        background: #333;
+        color: #fff;
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+    }
 
-     table {
-          tr {
-               background: #fff;
-               border-bottom: 1px solid #eee;
-          }
+    table {
+        tr {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
 
-          td {
-               padding: 10px;
-               vertical-align: top;
+        td {
+            padding: 10px;
+            vertical-align: top;
 
-               label {
-                    font-weight: bold;
-                    color: #999;
-               }
+            label {
+                font-weight: bold;
+                color: #999;
+            }
 
-               p {
+            p {
+                margin: 0;
+            }
+
+            input, select {
+                background: #f6f6f6;
+            }
+        }
+    }
+
+    #result {
+        margin: 20px 20px 20px 0;
+
+        > div {
+            padding: 10px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+
+            li {
+                background: #eee;
+                padding: 5px 10px;
+                display: block;
+                margin: 2px;
+                cursor: pointer;
+
+                .edit {
+                        overflow: hidden;
+                        width: 0;
+                        max-height: 0;
+
+                        .text-block {
+                            display: block;
+                            padding: 5px 10px;
+                            background: #ddd;
+                            margin-bottom: 5px;
+
+                            > strong {
+                                color: red;
+                            }
+
+                            > i {
+                                display: inline-block;
+                                margin: 0 5px 0 0;
+                                color: #666;
+                                border-radius: 5px;
+                                padding: 0 5px;
+                                background: #ccc;
+                            }
+                        }
+
+                        .text-change {
+                            display: block;
+                        }
+                }
+
+                &.open {
+                        .edit {
+                            width: 100%;
+                            max-height: 500px;
+                        }
+                }
+            }
+        }
+
+        &.loading {
+            &:after {
+                content: 'Loading...';
+                display: block;
+            }
+        }
+    }
+
+    li.recent-scan {
+        display: block;
+        padding: 5px 10px;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        list-style: none;
+        margin: 0;
+
+        span {
+            display: inline-block;
+            border: 1px solid #ddd;
+            background: #ddd;
+            padding: 5px;
+            vertical-align: middle;
+        }
+    }
+
+    #scws_activate {
+        background: #0685cf;
+        color: #fff;
+        text-align: center;
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        left: -10px;
+        
+        @media (min-width: 768px) {
+            width: 100%;
+            left: -20px;
+            padding-left: 20px;
+        }
+
+        .center-this {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 95%;
+            left: 2.5%;
+            
+            @media (min-width: 768px) {
+                left: 0;
+                width: 100%;
+            }
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.2;
+            margin: 0 auto 30px;
+            max-width: 500px;
+        }
+
+        h2 {
+            font-size: 40px;
+            font-weight: 600;
+            margin: 0 0 30px;
+            color: #fff;
+        }
+
+        .hbspt-form {
+            max-width: 500px;
+            margin: 0 auto;
+
+            form {
+                > div {
                     margin: 0;
-               }
+                }
+            }
 
-               input, select {
-                    background: #f6f6f6;
-               }
-          }
-     }
+            .actions {
+                padding: 0;
+                margin: 0;
+            }
 
-     #result {
-          margin: 20px 20px 20px 0;
+            label {
+                display: none;
+            }
 
-          > div {
-               padding: 10px;
-               background: #fff;
-               border-bottom: 1px solid #eee;
-
-               li {
-                    background: #eee;
-                    padding: 5px 10px;
+            .hs-error-msgs {
+                label {
                     display: block;
-                    margin: 2px;
-                    cursor: pointer;
+                    font-size: 14px;
+                    color: #fff;
+                }
+            }
 
-                    .edit {
-                         overflow: hidden;
-                         width: 0;
-                         max-height: 0;
+            input {
+                font-size: 16px;
+                line-height: 50px;
+                height: 50px;
+                border-radius: 5px;
+                margin: 0 0 5px;
+                border: 0;
+                background: #fff;
+                width: 100%;
+                color: #333;
+                padding: 0 10px;
+                box-sizing: border-box;
+            }
 
-                         .text-block {
-                              display: block;
-                              padding: 5px 10px;
-                              background: #ddd;
-                              margin-bottom: 5px;
-
-                              > strong {
-                                   color: red;
-                              }
-
-                              > i {
-                                   display: inline-block;
-                                   margin: 0 5px 0 0;
-                                   color: #666;
-                                   border-radius: 5px;
-                                   padding: 0 5px;
-                                   background: #ccc;
-                              }
-                         }
-
-                         .text-change {
-                              display: block;
-                         }
-                    }
-
-                    &.open {
-                         .edit {
-                              width: 100%;
-                              max-height: 500px;
-                         }
-                    }
-               }
-          }
-
-          &.loading {
-               &:after {
-                    content: 'Loading...';
-                    display: block;
-               }
-          }
-     }
-
-     li.recent-scan {
-          display: block;
-          padding: 5px 10px;
-          background: #fff;
-          border-bottom: 1px solid #eee;
-          list-style: none;
-          margin: 0;
-
-          span {
-               display: inline-block;
-               border: 1px solid #ddd;
-               background: #ddd;
-               padding: 5px;
-               vertical-align: middle;
-          }
-     }
+            button, input[type="submit"] {
+                background-color: #12be00;
+                width: 100%;
+                color: #fff;
+                line-height: 50px;
+                height: 50px;
+                font-size: 16px;
+                border-radius: 5px;
+                text-align: center;
+                border: 0;
+                box-sizing: border-box;
+                text-shadow: none;
+                box-shadow: none;
+            }
+        }
+    }
 }
