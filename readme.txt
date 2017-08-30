@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Scan your website for words and phrases that the Chinese government considers sensitive.
 
 == Description ==
-Edit or remove content the plugin identifies, and decrease the chance your site will be blocked by the Great Firewall of China. If your site's already being blocked, this plugin can help you discover possible reasons why.
+Scan your website for words and phrases that the Chinese government considers sensitive. Edit or remove content the plugin identifies, and decrease the chance your site will be blocked by the Great Firewall of China. If your site's already being blocked, this plugin can help you discover possible reasons why.
 
 == Installation ==
 1. Install and activate the plugin. (If you're unfamiliar with installing WordPress plugins, please read [this page from the Codex](http://codex.wordpress.org/Managing_Plugins)).
