@@ -5,7 +5,7 @@
 Plugin Name:  The Great Firewords of China
 Plugin URI:   https://studiohyperset.com/how-do-i-launch-a-chinese-website/
 Description:  Scan your website for words and phrases that the Chinese government considers sensitive. Edit or remove content the plugin identifies, and decrease the chance your site will be blocked by the Great Firewall of China. If your site's already being blocked, this plugin can help you discover possible reasons why.
-Version:      1.0
+Version:      1.0.1
 Author:       Studio Hyperset
 Author URI:   https://studiohyperset.com
 Text Domain:  sensitive-chinese
