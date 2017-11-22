@@ -3,8 +3,8 @@ Contributors: studiohyperset
 Tags: china, chinese website, great firewall, censorship, sensitive content
 Donate link: https://www.paypal.com/donate/?token=Gk5h8wyi1_xpB0eIFjSPtAq7lFg_lsiZMfoz2kH1QLZcx71ZOQ0wG6cArwF566oU4ZkdC0&country.x=US&locale.x=US
 Requires at least: 4
-Tested up to: 4.8.1
-Stable tag: 1.0
+Tested up to: 4.9
+Stable tag: 1.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -38,11 +38,19 @@ To learn how we used this plugin to help a global business intelligence company 
 4. Active Scan gfw-2.png
 
 == Changelog ==
+= 1.1 (11/22/17) =
+
+WP 4.9 includes a new file editor, which allows users to edit any file at any directory level. This release of the GFW plugin takes advantage of this new feature. Users can now link directly from the file scan screen to theme and plugin files that contain banned keywords. We hope this makes editing these files easier.
+
 = 1.0 (8/29/17) =
 
 Initial release.
 
 == Upgrade Notice ==
+= 1.1 (11/22/17) =
+
+WP 4.9 includes a new file editor, which allows users to edit any file at any directory level. This release of the GFW plugin takes advantage of this new feature. Users can now link directly from the file scan screen to theme and plugin files that contain banned keywords. We hope this makes editing these files easier.
+
 = 1.0 (8/29/17) =
 
 Initial release.
