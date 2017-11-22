@@ -185,7 +185,7 @@ function scws_file_scan() {
                         //Check if editable. 
                         //For Theme should be level 0 for CSS or level 0 or 1
                         //For Plugin should be level 0 or 1
-                        $columnResult .= '<div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file at the WP File Editor.', 'sensitive-chinese') . '</a></div>';
+                        $columnResult .= '<div class="text-change"><a href="'. $link . urlencode($edit) .'" target="_blank">'. __('Edit this file using the WP file editor.', 'sensitive-chinese') . '</a></div>';
 
                 $columnResult .= '</div>';
             $columnResult .= '</li>';
