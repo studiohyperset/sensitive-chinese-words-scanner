@@ -20,6 +20,13 @@ To learn how we used this plugin to help a global business intelligence company 
 
 2. You’ll see a new top-level admin menu titled “GFW.” Visit GFW > Overview to learn how the plugin works and to scan your site.
 
-# Developer Notes
+## Changelog
+- 1.1 (11/22/17)
+⋅⋅WP 4.9 includes a new file editor, which allows users to edit any file at any directory level. This release of the GFW plugin takes advantage of this new feature. Users can now link directly from the file scan screen to theme and plugin files that contain banned keywords. We hope this makes editing these files easier.
+
+- 1.0 (8/29/17)
+⋅⋅Initial release.
+
+## Developer Notes
 - Files are encoded with GB2312, but some characters inside will only work in some systems with GB18030.
 - Some words have Regex elements. Those must be escapped. Regex phrases should be inserted in their specific file.
