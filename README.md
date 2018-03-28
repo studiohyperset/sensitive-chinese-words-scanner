@@ -22,10 +22,12 @@ To learn how we used this plugin to help a global business intelligence company 
 
 ## Changelog
 - 1.1 (11/22/17)
- ⋅⋅WP 4.9 includes a new file editor, which allows users to edit any file at any directory level. This release of the GFW plugin takes advantage of this new feature. Users can now link directly from the file scan screen to theme and plugin files that contain banned keywords. We hope this makes editing these files easier.
+
+  WP 4.9 includes a new file editor, which allows users to edit any file at any directory level. This release of the GFW plugin takes advantage of this new feature. Users can now link directly from the file scan screen to theme and plugin files that contain banned keywords. We hope this makes editing these files easier.
 
 - 1.0 (8/29/17)
- ⋅⋅Initial release.
+  
+  Initial release.
 
 ## Developer Notes
 - Files are encoded with GB2312, but some characters inside will only work in some systems with GB18030.
