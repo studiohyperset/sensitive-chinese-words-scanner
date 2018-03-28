@@ -15,6 +15,11 @@ Please use your best judgement when editing any content the GFW plugin identifie
 
 To learn how we used this plugin to help a global business intelligence company launch its marketing site on the Chinese mainland, [click here](https://studiohyperset.com/how-do-i-launch-a-chinese-website/).
 
-# Chinese DB
-- Files are encoded with GB2312, but some characters inside will only work in some systems with GB18030
+## Installation Instructions
+1. Install and activate the plugin as you would any WordPress plugin. (If you’re unfamiliar with installing WordPress plugins, please read [this page](https://codex.wordpress.org/Managing_Plugins) from the Codex).
+
+2. You’ll see a new top-level admin menu titled “GFW.” Visit GFW > Overview to learn how the plugin works and to scan your site.
+
+# Developer Notes
+- Files are encoded with GB2312, but some characters inside will only work in some systems with GB18030.
 - Some words have Regex elements. Those must be escapped. Regex phrases should be inserted in their specific file.
