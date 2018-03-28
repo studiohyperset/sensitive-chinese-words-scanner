@@ -30,5 +30,5 @@ To learn how we used this plugin to help a global business intelligence company 
   Initial release.
 
 ## Developer Notes
-- Files are encoded with GB2312, but some characters inside will only work in some systems with GB18030.
-- Some words have Regex elements. Those must be escapped. Regex phrases should be inserted in their specific file.
+- Files are encoded with [GB2312](https://en.wikipedia.org/wiki/GB_2312), but some characters will only work with [GB18030](https://en.wikipedia.org/wiki/GB_18030) encoding.
+- Some words include regex elements. Thes words must be [escaped](https://en.wikipedia.org/wiki/Escape_character). Regex phrases should be inserted into their specific files.
