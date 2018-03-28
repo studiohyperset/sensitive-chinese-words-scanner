@@ -11,7 +11,7 @@ The Great Firewords of China WordPress plugin works in three ways:
 
 Please use your best judgement when editing any content the GFW plugin identifies as sensitive. The plugin relies on [@jasonqng](https://github.com/jasonqng)'s [list of sensitive Chinese keywords](https://github.com/jasonqng/chinese-keywords?utm_source=StudioHyperset.com&utm_medium=Case%20Study&utm_campaign=Launch%20a%20Chinese%20Website&utm_term=StudioHyperset&utm_content=StudioHyperset), which contains several generic terms such as “it,” “admin,” and “gov.” Your site won’t necessarily run afoul of the Chinese authorities just because our plugin identifies a sensitive keyword.
 
-To learn how we used this plugin to help a global business intelligence company launch its marketing site on the Chinese mainland, [click here](https://studiohyperset.com/how-do-i-launch-a-chinese-website/).
+To learn how we used this plugin to help a global business intelligence company launch its marketing site on the Chinese mainland, [click here](https://studiohyperset.com/how-do-i-launch-a-chinese-website/?utm_source=GitHub&utm_medium=GFW-Repo).
 
 ## Installation Instructions
 1. Install and activate the plugin as you would any WordPress plugin. (If you’re unfamiliar with installing WordPress plugins, please read [this page](https://codex.wordpress.org/Managing_Plugins) from the Codex).
