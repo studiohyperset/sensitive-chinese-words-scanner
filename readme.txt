@@ -38,6 +38,11 @@ To learn how we used this plugin to help a global business intelligence company 
 4. Active Scan gfw-2.png
 
 == Changelog ==
+
+- 1.2 (4/3/20)
+
+WP 5.4 updates. New form handlers.
+  
 = 1.1 (11/22/17) =
 
 WP 4.9 includes a new file editor, which allows users to edit any file at any directory level. This release of the GFW plugin takes advantage of this new feature. Users can now link directly from the file scan screen to theme and plugin files that contain banned keywords. We hope this makes editing these files easier.
