@@ -35,7 +35,7 @@ function scws_save_options() {
         $hs_context_json = json_encode($hs_context);
 
         //replace the values in this URL with your portal ID and your form GUID
-        $url = 'https://forms.hubspot.com/uploads/form/v2/550584/0018c43f-2093-4b23-94b1-ab25db01aeef';
+        $url = 'https://forms.hubspot.com/uploads/form/v2/4542224/5a531af0-7b8e-4351-9e3f-b8a996cc8ac7';
 
         $postdata = http_build_query(
             array(

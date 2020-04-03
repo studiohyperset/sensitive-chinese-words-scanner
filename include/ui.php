@@ -115,8 +115,8 @@ function scws_menu_function() {
  * Register the CSS
  */
 function scws_admin_style() {
-        wp_register_style( 'scws_admin_style', SCWS_URL . '/assets/css/styles.css', false, '1.0.0' );
-        wp_enqueue_style( 'scws_admin_style' );
+    wp_register_style( 'scws_admin_style', SCWS_URL . '/assets/css/styles.css', false, '1.0.0' );
+    wp_enqueue_style( 'scws_admin_style' );
 }
 add_action( 'admin_enqueue_scripts', 'scws_admin_style' );
 
@@ -134,14 +134,11 @@ function scws_menu_check_activation() {
                 <h2><?php _e('Let\'s get started.', 'sensitive-chinese'); ?></h2>
                 <p><?php _e('So we can customize your experience, please tell us a little about yourself.', 'sensitive-chinese'); ?></p>
 
-                <!--[if lte IE 8]>
-                <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
-                <![endif]-->
-                <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+                <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/shell.js"></script>
                 <script>
                 hbspt.forms.create({ 
-                    portalId: '550584',
-                    formId: '480a40ec-fd1d-43a8-9849-e0488baf94b7',
+                    portalId: "4542224",
+                    formId: "7ef5737e-0454-478a-b643-4c85cb1c38b2",
                     redirectUrl: "<?php echo admin_url('admin.php?page=scws_options'); ?>",
                     onFormReady: function($form) {
                         $form.find('input').each( function(){
