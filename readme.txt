@@ -3,7 +3,7 @@ Contributors: studiohyperset
 Tags: china, chinese website, great firewall, censorship, sensitive content
 Donate link: https://www.paypal.com/donate/?token=Gk5h8wyi1_xpB0eIFjSPtAq7lFg_lsiZMfoz2kH1QLZcx71ZOQ0wG6cArwF566oU4ZkdC0&country.x=US&locale.x=US
 Requires at least: 4
-Tested up to: 5.4
+Tested up to: 5.7
 Stable tag: 1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
